@@ -183,7 +183,7 @@ function create_app_version_and_build_number {
     echo
 
     # App version number
-    last_known_tag=`git describe --abbrev=0 --tags | sed -E 's/.*v([0-9]\.?[0-9]?\.?[0-9]?)(-.*)?/\1/'`
+    last_known_tag=`git describe --abbrev=0 --tags | sed -E 's/.*v([0-9]*\.?[0-9]*\.?[0-9]*)(-.*)?/\1/'`
 
     if [ -z "$last_known_tag" ]
     then
