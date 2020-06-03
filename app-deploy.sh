@@ -16,6 +16,8 @@
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
+enable_automatic_commit_push=true
+
 
 #########################################################
 #                     DEPLOY OPTIONS                    #
@@ -162,14 +164,19 @@ function initial_checkup {
     if [ $? -ne 0 ] || [ -z "$remote_branches" ]; then
         echo
         echo "Commit '$commit' not found on any remote branch."
-        read -r -p "Do you want to push it? [y/n] " push_to_git
-        if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
-            current_branch=`git rev-parse --abbrev-ref HEAD`
-            echo "Pushing..."
-            git push origin "$current_branch"
+	        if $enable_automatic_commit_push ; then
+	        read -r -p "Do you want to push it? [y/n] " push_to_git
+	        if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
+	            current_branch=`git rev-parse --abbrev-ref HEAD`
+	            echo "Pushing..."
+	            git push origin "$current_branch"
+	        else
+	            echo "Aborting."
+	            exit 3
+	        fi
         else
-            echo "Aborting."
-            exit 3
+        	echo "Aborting."
+	        exit 3
         fi
     fi
 }
