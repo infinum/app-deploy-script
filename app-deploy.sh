@@ -13,6 +13,7 @@
 #       Copyright (c) 2020 Infinum. All rights reserved.      #
 ###############################################################
 
+# Use global variables at your own risk as this can be overridden in the future.
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -97,15 +98,6 @@ function deploy_options {
 
 function main {
 
-    clear
-    echo
-    echo "###############################################################"
-    echo "#                         DEPLOY SCRIPT                       #"
-    echo "#                                                             #"
-    echo "#                   Copyright (c) 2020 Infinum.               #"
-    echo "###############################################################"
-    echo
-
     # BASE INFO
     # commit, tag, synced head,...
     initial_checkup
@@ -123,7 +115,6 @@ function main {
         
     push_tag_and_start_deploy
 }
-
 
 #################################
 #           HELPERS             #
@@ -303,7 +294,28 @@ function push_tag {
 }
 
 #################################
+#            UPDATE             #
+#################################
+
+function script_auto_update {
+    echo "Update..."
+}
+
+#################################
 #       START EVERYTHING        #
 #################################
 
-main
+clear
+echo
+echo "###############################################################"
+echo "#                         DEPLOY SCRIPT                       #"
+echo "#                                                             #"
+echo "#                   Copyright (c) 2020 Infinum.               #"
+echo "###############################################################"
+echo
+
+if ! [ "$1" == '--update' ] ; then
+    main
+else 
+    script_auto_update
+fi
