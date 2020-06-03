@@ -16,8 +16,14 @@
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
+# If enabled, console will be cleared on every script run.
+# By default, this option is enabled
 use_automatic_console_clean=true
-enable_automatic_commit_push=true
+# If enabled, not pushed commits will be pushed automatically without confirmation dialog.
+# By default, this option is disabled
+enable_automatic_commit_push=false
+# If enabled, confirmation dialog with deploy summary will be presented.
+# By default, this option is enabled
 enable_final_confirmation=true
 
 
@@ -168,19 +174,20 @@ function initial_checkup {
     if [ $? -ne 0 ] || [ -z "$remote_branches" ]; then
         echo
         echo "Commit '$commit' not found on any remote branch."
-	        if $enable_automatic_commit_push ; then
-	        read -r -p "Do you want to push it? [y/n] " push_to_git
-	        if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
-	            current_branch=`git rev-parse --abbrev-ref HEAD`
-	            echo "Pushing..."
-	            git push origin "$current_branch"
-	        else
-	            echo "Aborting."
-	            exit 3
-	        fi
+        if $enable_automatic_commit_push ; then
+            current_branch=`git rev-parse --abbrev-ref HEAD`
+            echo "Pushing..."
+            git push origin "$current_branch"
         else
-        	echo "Aborting."
-	        exit 3
+        	read -r -p "Do you want to push it? [y/n] " push_to_git
+            if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
+                current_branch=`git rev-parse --abbrev-ref HEAD`
+                echo "Pushing..."
+                git push origin "$current_branch"
+            else
+                echo "Aborting."
+                exit 3   
+            fi
         fi
     fi
 }
