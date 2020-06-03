@@ -17,6 +17,7 @@ set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
 enable_automatic_commit_push=true
+enable_final_confirmation=true
 
 
 #########################################################
@@ -245,6 +246,10 @@ function push_tag_and_start_deploy {
 
     changelog_message=`git show -s --format=%N ${tag} | tail -n +4`
 
+    if ! $enable_final_confirmation ; then
+	    push_tag
+    fi
+
     echo
     echo "###############################################################"
     echo "#                          DEPLOY                             #"
@@ -270,6 +275,10 @@ function push_tag_and_start_deploy {
         exit 6
     fi
 
+    push_tag
+}
+
+function push_tag {
     # Push if everything is ok!
     if [ $? -eq 0 ]; then
         echo
@@ -283,6 +292,7 @@ function push_tag_and_start_deploy {
         echo "CHECK YOUR CI FOR THE BUILD STATUS"
         echo "============================================================"
         echo
+        exit 0
     else
         echo
         echo "------------------------------------------------------------"
