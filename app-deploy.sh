@@ -17,6 +17,7 @@
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
+use_automatic_console_clean=true
 enable_automatic_commit_push=true
 enable_final_confirmation=true
 
@@ -305,7 +306,9 @@ function script_auto_update {
 #       START EVERYTHING        #
 #################################
 
-clear
+if $use_automatic_console_clean ; then
+    clear
+fi
 echo
 echo "###############################################################"
 echo "#                         DEPLOY SCRIPT                       #"
