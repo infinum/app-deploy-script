@@ -14,11 +14,16 @@ This script will install `app-deploy` into the `/usr/local/bin/` and `.deploy-op
 
 ## Script modifications
 
+### Main options
 In general, the script should be used as-is. 
 
 The only part that should be changed is stored inside  `.deploy-options.sh` file under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
+
 > Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
 
+**Final variable name inside `deploy_options` function must stay: `target`** 
+
+### Configuration flags
 As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script inside `.deploy-options.sh` file.
 
 ```bash
