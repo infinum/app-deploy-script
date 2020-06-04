@@ -95,7 +95,7 @@ function initial_checkup {
             echo "Pushing..."
             git push origin "$current_branch"
         else
-        	read -r -p "Do you want to push it? [y/n] " push_to_git
+            read -r -p "Do you want to push it? [y/n] " push_to_git
             if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
                 current_branch=`git rev-parse --abbrev-ref HEAD`
                 echo "Pushing..."
@@ -173,7 +173,7 @@ function push_tag_and_start_deploy {
     changelog_message=`git show -s --format=%N ${tag} | tail -n +4`
 
     if ! $enable_final_confirmation ; then
-	    push_tag
+        push_tag
     fi
 
     echo
@@ -233,7 +233,18 @@ function push_tag {
 #################################
 
 function script_auto_update {
-    echo "Update..."
+    echo 
+    echo "Please wait until main script is finished with updating..."
+    echo
+    echo "Fetching new data..."
+    mkdir .tmp
+    git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
+    echo "Updating..."
+    cat .tmp/app-deploy.sh > app-deploy.sh
+    echo "Cleaning temporary files..."
+    rm -rf .tmp
+    echo "Updating finished!"
+    exit 0
 }
 
 #################################
