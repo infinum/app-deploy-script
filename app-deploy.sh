@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./deploy-options.sh
+source ./.deploy-options.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
