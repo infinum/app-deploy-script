@@ -237,12 +237,12 @@ function script_auto_update {
     echo "Please wait until main script is finished with updating..."
     echo
     echo "Fetching new data..."
-    mkdir .tmp
-    git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
+    mkdir .app_deploy_tmp
+    git clone --quiet git@github.com:infinum/app-deploy-script.git .app_deploy_tmp
     echo "Updating..."
-    cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
+    cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
     echo "Cleaning temporary files..."
-    rm -rf .tmp
+    rm -rf .app_deploy_tmp
     echo "Updating finished!"
     exit 0
 }
