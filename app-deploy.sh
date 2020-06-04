@@ -240,7 +240,7 @@ function script_auto_update {
     mkdir .tmp
     git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
     echo "Updating..."
-    cat .tmp/app-deploy.sh > app-deploy.sh
+    cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
     echo "Cleaning temporary files..."
     rm -rf .tmp
     echo "Updating finished!"
