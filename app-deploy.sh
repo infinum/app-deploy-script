@@ -16,7 +16,15 @@
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
-enable_automatic_commit_push=true
+# If enabled, console will be cleared on every script run.
+# By default, this option is enabled
+use_automatic_console_clean=true
+# If enabled, not pushed commits will be pushed automatically without confirmation dialog.
+# By default, this option is disabled
+enable_automatic_commit_push=false
+# If enabled, confirmation dialog with deploy summary will be presented.
+# By default, this option is enabled
+enable_final_confirmation=true
 
 
 #########################################################
@@ -96,7 +104,9 @@ function deploy_options {
 
 function main {
 
-    clear
+    if $use_automatic_console_clean ; then
+        clear
+    fi
     echo
     echo "###############################################################"
     echo "#                         DEPLOY SCRIPT                       #"
@@ -164,19 +174,20 @@ function initial_checkup {
     if [ $? -ne 0 ] || [ -z "$remote_branches" ]; then
         echo
         echo "Commit '$commit' not found on any remote branch."
-	        if $enable_automatic_commit_push ; then
-	        read -r -p "Do you want to push it? [y/n] " push_to_git
-	        if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
-	            current_branch=`git rev-parse --abbrev-ref HEAD`
-	            echo "Pushing..."
-	            git push origin "$current_branch"
-	        else
-	            echo "Aborting."
-	            exit 3
-	        fi
+        if $enable_automatic_commit_push ; then
+            current_branch=`git rev-parse --abbrev-ref HEAD`
+            echo "Pushing..."
+            git push origin "$current_branch"
         else
-        	echo "Aborting."
-	        exit 3
+        	read -r -p "Do you want to push it? [y/n] " push_to_git
+            if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
+                current_branch=`git rev-parse --abbrev-ref HEAD`
+                echo "Pushing..."
+                git push origin "$current_branch"
+            else
+                echo "Aborting."
+                exit 3   
+            fi
         fi
     fi
 }
@@ -245,6 +256,10 @@ function push_tag_and_start_deploy {
 
     changelog_message=`git show -s --format=%N ${tag} | tail -n +4`
 
+    if ! $enable_final_confirmation ; then
+	    push_tag
+    fi
+
     echo
     echo "###############################################################"
     echo "#                          DEPLOY                             #"
@@ -270,6 +285,10 @@ function push_tag_and_start_deploy {
         exit 6
     fi
 
+    push_tag
+}
+
+function push_tag {
     # Push if everything is ok!
     if [ $? -eq 0 ]; then
         echo
@@ -283,6 +302,7 @@ function push_tag_and_start_deploy {
         echo "CHECK YOUR CI FOR THE BUILD STATUS"
         echo "============================================================"
         echo
+        exit 0
     else
         echo
         echo "------------------------------------------------------------"
