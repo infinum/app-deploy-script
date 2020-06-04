@@ -18,10 +18,10 @@ normal=$(tput sgr0)
 
 echo "==> ${bold}This script will install:${normal}"
 echo "/usr/local/bin/app-deploy"
-echo "Press RETURN to continue or any other key to abort"
-getc c
-if ! [[ "$c" == $'\r' || "$c" == $'\n' ]]; then
-exit 1
+echo
+read -r -p "Do you want to proceed? [y/n] " c
+if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
+    exit 1
 fi
 echo
 echo "Fetching script data..."
