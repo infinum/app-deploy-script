@@ -29,7 +29,10 @@ mkdir .app_deploy_tmp
 git clone --quiet git@github.com:infinum/app-deploy-script.git .app_deploy_tmp
 echo "Installing..."
 cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
-cat .app_deploy_tmp/deploy-options.sh > ./.deploy-options.sh
+
+if ! [ -f ./.deploy-options.sh ]; then
+	cat .app_deploy_tmp/deploy-options.sh > ./.deploy-options.sh
+fi
 
 chmod +rx /usr/local/bin/app-deploy
 rm -rf .app_deploy_tmp
