@@ -13,8 +13,16 @@
 #       Copyright (c) 2020 Infinum. All rights reserved.      #
 ###############################################################
 
-echo 
-echo "Please wait until main script is installed..."
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+echo "==> ${bold}This script will install:${normal}"
+echo "/usr/local/bin/app-deploy"
+echo "Press RETURN to continue or any other key to abort"
+getc c
+if ! [[ "$c" == $'\r' || "$c" == $'\n' ]]; then
+exit 1
+fi
 echo
 echo "Fetching script data..."
 mkdir .tmp
@@ -23,5 +31,5 @@ echo "Installing..."
 cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
 chmod +rx /usr/local/bin/app-deploy
 rm -rf .tmp
-echo "Installing finished!"
+echo "Done!"
 exit 0
