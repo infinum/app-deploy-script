@@ -25,13 +25,14 @@ if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
 fi
 echo
 echo "Fetching script data..."
-mkdir .tmp
-git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
+mkdir .app_deploy_tmp
+git clone --quiet git@github.com:infinum/app-deploy-script.git .app_deploy_tmp
 echo "Installing..."
-cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
-cat .tmp/deploy-options.sh > ./.deploy-options.sh
+cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
+cat .app_deploy_tmp/deploy-options.sh > ./.deploy-options.sh
 
 chmod +rx /usr/local/bin/app-deploy
-rm -rf .tmp
+rm -rf .app_deploy_tmp
+
 echo "Done!"
 exit 0

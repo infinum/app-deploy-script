@@ -1,9 +1,6 @@
 # App Deploy Script
 
-
-
 Deploy script used for creating the tag with tag message in format `internal-all/v1.0.0-1234`, where `internal-all` is marking the workflow that should be started on the CI, `v1.2.3` represents app version and `1234` represents the build number. Tag message set from this script can be used later for the changelog message on any CI (e.g. Bitrise). The build number is number calculated as a total number of tags available on GitHub incremented by one.
-
 
 ## Installation
 
@@ -145,8 +142,6 @@ Is configuration correct for the CI deployment? [y/n]
 
 In the end, the tag is created and pushed to the remote. 
 
-
-
 ## Updating
 
 Script have the ability to auto-update itself. To update the script, just add `--update` argument.
@@ -156,13 +151,9 @@ app-deploy --update
 
 Script will fetch latest available changes from the repo and it will change the content of the `app-deploy.sh` script with fetched one. Keep in mind that this will result in overwrite of any changes made by you inside `app-deploy.sh` file. ***This update will not effect `deploy-options.sh` file.***
 
-
-
 ## Contributing
 
 Feedback and code contributions are very much welcome. Just make a pull request with a short description of your changes. By making contributions to this project you permit your code to be used under the same [license](https://github.com/infinum/app-deploy-script/blob/master/LICENSE).
-
-
 
 ## Credits
 
