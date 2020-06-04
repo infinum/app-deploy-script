@@ -26,7 +26,7 @@ fi
 echo
 echo "Fetching script data..."
 mkdir .tmp
-git clone --quiet git@github.com:infinum/app-deploy-script.git --branch feature/auto-update .tmp
+git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
 echo "Installing..."
 cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
 echo
