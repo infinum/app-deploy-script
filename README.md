@@ -154,7 +154,7 @@ Script have the ability to auto-update itself. To update the script, just add `-
 app-deploy --update
 ```
 
-Script will fetch latest available changes from the repo and it will change the content of the `app-deploy.sh` script with fetched one. Keep in mind that this will result in overwrite of any changes made by you inside `app-deploy.sh` file. ***This update will not effect `deploy-options.sh` file.***
+Script will fetch latest available changes from the repo and it will change the content of the `app-deploy.sh` script with fetched one. Keep in mind that this will result in overwrite of any changes made by you inside `app-deploy.sh` file. ***This update will not effect `.deploy-options.sh` file.***
 
 ## Contributing
 
