@@ -26,9 +26,13 @@ fi
 echo
 echo "Fetching script data..."
 mkdir .tmp
-git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
+git clone --quiet git@github.com:infinum/app-deploy-script.git --branch feature/auto-update .tmp
 echo "Installing..."
 cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
+echo
+read -r -p "Enter path for installing the deploy-options part or press enter to install it into the default folder: [/my/project/path] " path
+mkdir -p ./"$path" && cp .tmp/deploy-options.sh ./"$path"/.deploy-options.sh
+
 chmod +rx /usr/local/bin/app-deploy
 rm -rf .tmp
 echo "Done!"
