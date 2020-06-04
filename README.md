@@ -7,11 +7,12 @@ Deploy script used for creating the tag with tag message in format `internal-all
 
 ## Installation
 
-In order to install this script, just run this command in terminal from your project root folder:
+In order to install this script, just run this command in terminal from your <u>project root folder</u>:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/infinum/app-deploy-script/master/install.sh)"
 ```
 
+This script will install `app-deploy` into the `/usr/local/bin/` and `.deploy-options.sh` into the root folder of the project.
 > Note: Do not change name of the `.deploy-options.sh` file!
 
 ## Script modifications
