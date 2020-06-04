@@ -1,20 +1,25 @@
 # App Deploy Script
 
-
-
 Deploy script used for creating the tag with tag message in format `internal-all/v1.0.0-1234`, where `internal-all` is marking the workflow that should be started on the CI, `v1.2.3` represents app version and `1234` represents the build number. Tag message set from this script can be used later for the changelog message on any CI (e.g. Bitrise). The build number is number calculated as a total number of tags available on GitHub incremented by one.
 
+## Installation
 
+In order to install this script, just run this command in terminal from your <u>project root folder</u>:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/infinum/app-deploy-script/master/install.sh)"
+```
 
+This script will install `app-deploy` into the `/usr/local/bin/` and `.deploy-options.sh` into the root folder of the project.
+> Note: Do not change name of the `.deploy-options.sh` file!
 
 ## Script modifications
 
-In general, the script should be used as-is. The only part that could be changed is marked as "DEPLOY OPTIONS" and it is available under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
-Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
+In general, the script should be used as-is. 
 
+The only part that should be changed is stored inside  `.deploy-options.sh` file under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
+> Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
 
-
-As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script.
+As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script inside `.deploy-options.sh` file.
 
 ```bash
 # If enabled, console will be cleared on every script run.
@@ -28,14 +33,12 @@ enable_automatic_commit_push=false
 enable_final_confirmation=true
 ```
 
-
-
 ## Usage
 
-Script should be stored somewhere in the project folder (e.g. in root folder, deployment folder, etc.) and it can be run just by calling the script name:
+Script should be run just by calling the script name from the folder where `.deploy-options.sh` is stored (e.g. root folder):
 
 ```bash
-./app-deploy.sh
+app-deploy
 ```
 
 After that, the script will check if everything is pushed to the remote and if needed it will push all commits before it continues (automatic push can be enabled with `enable_automatic_commit_push` flag). 
@@ -138,6 +141,15 @@ Is configuration correct for the CI deployment? [y/n]
 ```
 
 In the end, the tag is created and pushed to the remote. 
+
+## Updating
+
+Script have the ability to auto-update itself. To update the script, just add `--update` argument.
+```bash
+app-deploy --update
+```
+
+Script will fetch latest available changes from the repo and it will change the content of the `app-deploy.sh` script with fetched one. Keep in mind that this will result in overwrite of any changes made by you inside `app-deploy.sh` file. ***This update will not effect `deploy-options.sh` file.***
 
 ## Contributing
 

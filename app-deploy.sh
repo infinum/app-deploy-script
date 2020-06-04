@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./.deploy-options.sh
+
 ###############################################################
 #                       DEPLOY SCRIPT                         #
 #                                                             #
@@ -13,84 +15,10 @@
 #       Copyright (c) 2020 Infinum. All rights reserved.      #
 ###############################################################
 
+# Use global variables at your own risk as this can be overridden in the future.
 set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
-# If enabled, console will be cleared on every script run.
-# By default, this option is enabled
-use_automatic_console_clean=true
-# If enabled, not pushed commits will be pushed automatically without confirmation dialog.
-# By default, this option is disabled
-enable_automatic_commit_push=false
-# If enabled, confirmation dialog with deploy summary will be presented.
-# By default, this option is enabled
-enable_final_confirmation=true
-
-
-#########################################################
-#                     DEPLOY OPTIONS                    #
-#                                                       #
-# Part of script that should be edited by the user.     #
-#                                                       #
-# You can add/remove/edit targets that you want to use  #
-# for the deployment.                                   #
-#                                                       #
-# This will generate first part of tag.                 #
-#########################################################
-
-## Used for the option select by the user
-## And for generating first part of the tag.
-## If option is added to the "Select target"
-## same option should be added under the 
-## if/else logic for creating the first part.
-
-function deploy_options {
-
-    # Options shown to the user
-
-    echo
-    echo "###############################################################"
-    echo "#                  DEPLOY TARGET SELECTION                    #"
-    echo "###############################################################"
-    echo
-    echo "--------------"
-    echo "| TryOutApps |"
-    echo "--------------"
-    echo
-    echo "[0] All"
-    echo "[1] Staging"
-    echo "[2] UAT"
-    echo "[3] Production"
-    echo
-    echo "=================="
-    echo
-    echo "---------------------"
-    echo "| APP STORE CONNECT |"
-    echo "---------------------"
-    echo
-    echo "[4] App Store"
-    echo
-    read -r -p "Enter number in square brackets: " target_selection
-    # erase_lines
-
-    # Logic for creating first part of the tag.
-    # Should be in sync with options shown to the user.
-
-    if [ ${target_selection} -eq 0 ]; then
-        target="internal-all"
-    elif [ ${target_selection} -eq 1 ]; then
-        target="internal-staging"
-    elif [ ${target_selection} -eq 2 ]; then
-        target="internal-uat"
-    elif [ ${target_selection} -eq 3 ]; then
-        target="internal-production"
-    elif [ ${target_selection} -eq 4 ]; then
-        target="appstore"
-    else
-        echo "Wrong target index. Aborting..."
-        exit 4
-    fi
-}
 
 #################################
 #             MAIN              #
@@ -103,17 +31,6 @@ function deploy_options {
 # to edit any part of it as suits your needs.
 
 function main {
-
-    if $use_automatic_console_clean ; then
-        clear
-    fi
-    echo
-    echo "###############################################################"
-    echo "#                         DEPLOY SCRIPT                       #"
-    echo "#                                                             #"
-    echo "#                   Copyright (c) 2020 Infinum.               #"
-    echo "###############################################################"
-    echo
 
     # BASE INFO
     # commit, tag, synced head,...
@@ -132,7 +49,6 @@ function main {
         
     push_tag_and_start_deploy
 }
-
 
 #################################
 #           HELPERS             #
@@ -179,7 +95,7 @@ function initial_checkup {
             echo "Pushing..."
             git push origin "$current_branch"
         else
-        	read -r -p "Do you want to push it? [y/n] " push_to_git
+            read -r -p "Do you want to push it? [y/n] " push_to_git
             if [[ ${push_to_git} =~ ^(yes|y|Y) ]] || [ -z ${push_to_git} ]; then
                 current_branch=`git rev-parse --abbrev-ref HEAD`
                 echo "Pushing..."
@@ -257,7 +173,7 @@ function push_tag_and_start_deploy {
     changelog_message=`git show -s --format=%N ${tag} | tail -n +4`
 
     if ! $enable_final_confirmation ; then
-	    push_tag
+        push_tag
     fi
 
     echo
@@ -313,7 +229,41 @@ function push_tag {
 }
 
 #################################
+#            UPDATE             #
+#################################
+
+function script_auto_update {
+    echo 
+    echo "Please wait until main script is finished with updating..."
+    echo
+    echo "Fetching new data..."
+    mkdir .tmp
+    git clone --quiet git@github.com:infinum/app-deploy-script.git .tmp
+    echo "Updating..."
+    cat .tmp/app-deploy.sh > /usr/local/bin/app-deploy
+    echo "Cleaning temporary files..."
+    rm -rf .tmp
+    echo "Updating finished!"
+    exit 0
+}
+
+#################################
 #       START EVERYTHING        #
 #################################
 
-main
+if $use_automatic_console_clean ; then
+    clear
+fi
+echo
+echo "###############################################################"
+echo "#                         DEPLOY SCRIPT                       #"
+echo "#                                                             #"
+echo "#                   Copyright (c) 2020 Infinum.               #"
+echo "###############################################################"
+echo
+
+if ! [ "$1" == '--update' ] ; then
+    main
+else 
+    script_auto_update
+fi
