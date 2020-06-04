@@ -9,12 +9,12 @@ Deploy script used for creating the tag with tag message in format `internal-all
 
 ## Script modifications
 
-In general, the script should be used as-is. The only part that could be changed is marked as "DEPLOY OPTIONS" and it is available under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
-Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
+In general, the script should be used as-is. 
 
+The only part that should be changed is stored inside  `deploy-options.sh` file under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
+> Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
 
-
-As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script.
+As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script inside `deploy-options.sh` file.
 
 ```bash
 # If enabled, console will be cleared on every script run.
@@ -139,9 +139,24 @@ Is configuration correct for the CI deployment? [y/n]
 
 In the end, the tag is created and pushed to the remote. 
 
+
+
+## Updating
+
+Script have the ability to auto-update itself. To update the script, just add `--update` argument.
+```bash
+./app-deploy.sh --update
+```
+
+Script will fetch latest available changes from the repo and it will change the content of the `app-deploy.sh` script with fetched one. Keep in mind that this will result in overwrite of any changes made by you inside `app-deploy.sh` file. ***This update will not effect `deploy-options.sh` file.***
+
+
+
 ## Contributing
 
 Feedback and code contributions are very much welcome. Just make a pull request with a short description of your changes. By making contributions to this project you permit your code to be used under the same [license](https://github.com/infinum/app-deploy-script/blob/master/LICENSE).
+
+
 
 ## Credits
 
