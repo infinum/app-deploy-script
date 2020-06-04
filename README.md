@@ -28,7 +28,7 @@ enable_automatic_commit_push=false
 enable_final_confirmation=true
 ```
 
-
+> **WARNING:** In order for the script to work properly, both app-deploy.sh and deploy-options.sh files should be present in the same folder inside your project.
 
 ## Usage
 
