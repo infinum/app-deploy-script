@@ -12,6 +12,24 @@ Deploy script used for creating the tag with tag message in format `internal-all
 In general, the script should be used as-is. The only part that could be changed is marked as "DEPLOY OPTIONS" and it is available under the `deploy_options` function. This part of the script is responsible for creating the first part of the tag that can trigger a specific workflow on CI. If given values are not enough or they are not representing the project structure, they can be replaced with different values. 
 Keep in mind that prefix `internal-` should be used for the builds created for the internal testing, while builds for beta testing (i.e. Google Play Beta or Apple TestFlight) or public release, should be prefixed as `beta-` or `playstore`/ `appstore`.
 
+
+
+As tag creation is separated into the few small steps, some of them can be skipped and/or disabled by changing configuration flags at the beginning of the script.
+
+```bash
+# If enabled, console will be cleared on every script run.
+# By default, this option is enabled
+use_automatic_console_clean=true
+# If enabled, not pushed commits will be pushed automatically without confirmation dialog.
+# By default, this option is disabled
+enable_automatic_commit_push=false
+# If enabled, confirmation dialog with deploy summary will be presented.
+# By default, this option is enabled
+enable_final_confirmation=true
+```
+
+
+
 ## Usage
 
 Script should be stored somewhere in the project folder (e.g. in root folder, deployment folder, etc.) and it can be run just by calling the script name:
@@ -20,7 +38,7 @@ Script should be stored somewhere in the project folder (e.g. in root folder, de
 ./app-deploy.sh
 ```
 
-After that, the script will check if everything is pushed to the remote and if needed it will push all commits before it continues. 
+After that, the script will check if everything is pushed to the remote and if needed it will push all commits before it continues (automatic push can be enabled with `enable_automatic_commit_push` flag). 
 
 ```bash
 ###############################################################
@@ -95,7 +113,7 @@ Enter changelog message...
 ------------------------------------------------------------
 ```
 
-If everything is done correctly, the confirmation step will be shown with the summary of selected options:
+If everything is done correctly, the confirmation step will be shown with the summary of selected options (can be skipped by disabling the `enable_final_confirmation` flag):
 
 ```bash
 ###############################################################
