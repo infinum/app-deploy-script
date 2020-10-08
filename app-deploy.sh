@@ -238,7 +238,7 @@ function script_auto_update {
     echo
     echo "Fetching new data..."
     mkdir .app_deploy_tmp
-    git clone --quiet git@github.com:infinum/app-deploy-script.git .app_deploy_tmp
+    git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
     echo "Updating..."
     cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
     echo "Cleaning temporary files..."
