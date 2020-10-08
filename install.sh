@@ -26,7 +26,7 @@ fi
 echo
 echo "Fetching script data..."
 mkdir .app_deploy_tmp
-git clone --quiet git@github.com:infinum/app-deploy-script.git .app_deploy_tmp
+git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
 echo "Installing..."
 cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
 
