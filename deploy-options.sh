@@ -27,8 +27,6 @@ enable_final_confirmation=true
 ## same option should be added under the 
 ## if/else logic for creating the first part.
 
-## WARNING: This file should be in the same folder as `app-deploy.sh` file
-
 function deploy_options {
 
     # Options shown to the user
