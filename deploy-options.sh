@@ -40,10 +40,9 @@ function deploy_options {
     echo "| TryOutApps |"
     echo "--------------"
     echo
-    echo "[0] All"
-    echo "[1] Staging"
-    echo "[2] UAT"
-    echo "[3] Production"
+    echo "[0] Staging"
+    echo "[1] UAT"
+    echo "[2] Production"
     echo
     echo "=================="
     echo
@@ -51,26 +50,11 @@ function deploy_options {
     echo "| APP STORE CONNECT |"
     echo "---------------------"
     echo
-    echo "[4] App Store"
+    echo "[3] App Store"
     echo
     read -r -p "Enter number in square brackets: " target_selection
-    # erase_lines
 
-    # Logic for creating first part of the tag.
+        # Array for creating first part of the tag.
     # Should be in sync with options shown to the user.
-
-    if [ ${target_selection} -eq 0 ]; then
-        target="internal-all"
-    elif [ ${target_selection} -eq 1 ]; then
-        target="internal-staging"
-    elif [ ${target_selection} -eq 2 ]; then
-        target="internal-uat"
-    elif [ ${target_selection} -eq 3 ]; then
-        target="internal-production"
-    elif [ ${target_selection} -eq 4 ]; then
-        target="appstore"
-    else
-        echo "Wrong target index. Aborting..."
-        exit 4
-    fi
+    environments=("internal-staging" "internal-uat" "internal-production" "appstore")
 }
