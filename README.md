@@ -67,7 +67,7 @@ Targeting commit: e3e45889b
 ---------------------------------------------------------------
 ```
 
-Next step is selecting a target that should be run on CI:
+Next step is selecting one or multiple targets that should be run on CI:
 
 ```bash
 
