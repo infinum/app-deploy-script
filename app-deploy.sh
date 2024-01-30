@@ -39,6 +39,7 @@ function main {
     # CREATE TAG
 
     deploy_options
+    input_to_tags
     create_app_version_and_build_number
 
     # CREATE CHANGELOG
@@ -108,6 +109,23 @@ function initial_checkup {
     fi
 }
 
+function input_to_tags {
+
+    # Parse all selected options
+    IFS=', ' read -r -a environments_array <<< "$target_selection"
+
+    environments_to_build=()
+
+    for environment in "${environments_array[@]}"; do
+        if [ ${environment} -le 9 -a ${environment} -ge 0 ]; then
+            environments_to_build+=("${environments[${environment}]}")
+        else
+            echo "Error: You chose wrong, young Jedi. This is the end of your path..."
+            exit 4
+        fi
+    done
+}
+
 function create_app_version_and_build_number {
 
     echo
@@ -146,7 +164,10 @@ function create_app_version_and_build_number {
     fi
 
     # Create tag name internal{-TargetX}/vM.m.p-{number of commits}. E.g. internal-all/v1.0.0-1234
-    tag="$target/v$appversion-$tags_count"
+    tags_to_deploy=()
+    for target in "${environments_to_build[@]}"; do
+        tags_to_deploy+=("$target/v$appversion-$tags_count")
+    done
 
     echo
     echo "Next app version is: ${bold}v$appversion-$tags_count${normal}"
@@ -164,8 +185,19 @@ function generate_tag_and_changelog {
     echo "Enter changelog message..."
     echo "------------------------------------------------------------"
     sleep 1
-    
-    git tag -a "$tag"
+
+    tag_message_added=0
+    for tag in "${tags_to_deploy[@]}"; do
+
+        if [ ${tag_message_added} -eq 1 ]; then
+            TAG=`git describe --exact-match`
+            CHANGELOG=`git show -s --format=%N ${TAG} | tail -n +4`
+            git tag -a "$tag" -m "${CHANGELOG}"
+        else
+            git tag -a "$tag"
+            tag_message_added=1
+        fi
+    done
 }
 
 function push_tag_and_start_deploy {
@@ -184,20 +216,23 @@ function push_tag_and_start_deploy {
     echo "---------------------------------------------------------------"
     echo "                      ~ CONFIGURATION ~   "
     echo
-    echo "Target: ${bold}$target_selection. $target${normal}"
-    echo "Version: ${bold}v$appversion-$tags_count${normal}"
-    echo "Tag: ${bold}$tag${normal}"
+    echo "Version: ${bold}v$appversion-$tags_count${normal}"        
+    for tag in "${tags_to_deploy[@]}"; do
+        echo "Tag: ${bold}$tag${normal}"
+    done
     echo
     echo "Changelog:"
     echo "${bold}$changelog_message${normal}"
     echo "---------------------------------------------------------------"
     echo
-    read -r -p "Is configuration correct for the CI deployment? [y/n] " response
+    read -r -p "Is configuration correct for the CI deployment? [y or enter / n] " response
     echo
 
-    if [[ ${response} =~ ^(no|n|N) ]] || [ -z ${response} ]; then
-        git tag -d "$tag"
+    if [[ ${response} =~ ^(no|n|N) ]]; then
         echo "Aborting."
+        for tag in "${tags_to_deploy[@]}"; do
+            git tag -d "$tag"
+        done
         exit 6
     fi
 
@@ -209,9 +244,12 @@ function push_tag {
     if [ $? -eq 0 ]; then
         echo
         echo "------------------------------------------------------------"
-        echo "Tag added. Pushing tags ..."
-        echo        
-        git push origin "$tag"
+        echo
+        for tag in "${tags_to_deploy[@]}"; do
+            # Push if everything is ok!
+            echo "Tag ${bold}${tag}${normal} added. Pushing tag ..."
+            git push origin "$tag"
+        done
         echo
         echo "============================================================"
         echo "DEPLOY TAG SUCCESSFULLY ADDED!"
