@@ -117,7 +117,7 @@ function input_to_tags {
     environments_to_build=()
 
     for environment in "${environments_array[@]}"; do
-        if [ ${environment} -le 9 -a ${environment} -ge 0 ]; then
+        if [ ${environment} -le $((${#environments[@]} - 1)) -a ${environment} -ge 0 ]; then
             environments_to_build+=("${environments[${environment}]}")
         else
             echo "Error: You chose wrong, young Jedi. This is the end of your path..."
