@@ -275,7 +275,9 @@ function script_auto_update {
     echo "Please wait until main script is finished with updating..."
     echo
     echo "Fetching new data..."
-    mkdir .app_deploy_tmp
+    if [ ! -d ".app_deploy_tmp" ]; then
+        mkdir .app_deploy_tmp
+    fi
     git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
     echo "Updating..."
     cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
