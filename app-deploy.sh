@@ -45,9 +45,9 @@ function main {
     # CREATE CHANGELOG
 
     generate_tag_and_changelog
-        
+
     # DEPLOY
-        
+
     push_tag_and_start_deploy
 }
 
@@ -80,7 +80,7 @@ function initial_checkup {
         echo "Failed to get message for commit '$commit'. Aborting."
         exit 2
     fi
-    
+
     echo "---------------------------------------------------------------"
     echo "Targeting commit: ${bold}$commit${normal}"
     echo "---------------------------------------------------------------"
@@ -103,7 +103,7 @@ function initial_checkup {
                 git push origin "$current_branch"
             else
                 echo "Aborting."
-                exit 3   
+                exit 3
             fi
         fi
     fi
@@ -146,7 +146,7 @@ function create_app_version_and_build_number {
     fi
 
     if ! [[ "$appversion" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-    then 
+    then
         echo "App version is in wrong format (use M.m.p format, e.g. 1.0.0). Aborting..."
         exit 5
     fi
@@ -174,19 +174,57 @@ function create_app_version_and_build_number {
     sleep 1
 }
 
-function generate_tag_and_changelog {
+function prepare_changelog_generator {
+    local changelog_generator_file="./.changelog-generator.sh"
 
+    if [[ ! -f "$changelog_generator_file" ]]; then
+        return 1
+    fi
+
+    source "$changelog_generator_file"
+    if ! declare -f generate_changelog > /dev/null; then
+        return 1
+    fi
+
+    return 0
+}
+
+function generate_tag_and_changelog {
     echo
     echo "###############################################################"
     echo "#                          CHANGELOG                          #"
     echo "###############################################################"
     echo
+
+    # Generate changelog
+
+    if prepare_changelog_generator; then
+        echo "------------------------------------------------------------"
+        echo "Generating changelog message..."
+        echo "------------------------------------------------------------"
+
+        CHANGELOG=""
+        generate_changelog # Result will be saved in CHANGELOG
+
+        if [[ ! -z "$CHANGELOG" ]]; then
+            for tag in "${tags_to_deploy[@]}"; do
+                git tag -a "$tag" -m "${CHANGELOG}"
+            done
+            return # No need to ask for changelog if one is generated
+        else
+            echo "Failed to generate changelog..."
+            echo
+        fi
+    fi
+
+    # Enter changelog manually
+
     echo "------------------------------------------------------------"
     echo "Enter changelog message..."
     echo "------------------------------------------------------------"
     sleep 1
 
-    tag_message_added=0
+    local tag_message_added=0
     for tag in "${tags_to_deploy[@]}"; do
 
         if [ ${tag_message_added} -eq 1 ]; then
@@ -216,7 +254,7 @@ function push_tag_and_start_deploy {
     echo "---------------------------------------------------------------"
     echo "                      ~ CONFIGURATION ~   "
     echo
-    echo "Version: ${bold}v$appversion-$tags_count${normal}"        
+    echo "Version: ${bold}v$appversion-$tags_count${normal}"
     for tag in "${tags_to_deploy[@]}"; do
         echo "Tag: ${bold}$tag${normal}"
     done
@@ -271,7 +309,7 @@ function push_tag {
 #################################
 
 function script_auto_update {
-    echo 
+    echo
     echo "Please wait until main script is finished with updating..."
     echo
     echo "Fetching new data..."
@@ -304,6 +342,6 @@ echo
 
 if ! [ "$1" == '--update' ] ; then
     main
-else 
+else
     script_auto_update
 fi

@@ -24,7 +24,7 @@ enable_final_confirmation=true
 ## Used for the option select by the user
 ## And for generating first part of the tag.
 ## If option is added to the "Select target"
-## same option should be added under the 
+## same option should be added under the
 ## if/else logic for creating the first part.
 
 function deploy_options {
