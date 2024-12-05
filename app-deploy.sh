@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 source ./.deploy-options.sh
-source /usr/local/bin/app-deploy-helpers/auto_update.sh
-source /usr/local/bin/app-deploy-helpers/init.sh
+source /usr/local/bin/app-deploy-helpers/__auto_update.sh
+source /usr/local/bin/app-deploy-helpers/__init.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -279,14 +279,14 @@ echo
 echo "###############################################################"
 echo "#                         DEPLOY SCRIPT                       #"
 echo "#                                                             #"
-echo "#                   Copyright (c) 2020 Infinum.               #"
+echo "#                   Copyright (c) 2024 Infinum.               #"
 echo "###############################################################"
 echo
 
 if [ "$1" == '--update' ] ; then
-    script_auto_update
+    __script_auto_update
 elif [ "$1" == 'init' ] ; then
-    init
+    __init
 else
     main 
 fi

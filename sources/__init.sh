@@ -2,7 +2,7 @@
 #       INIT NEW PROJECT        #
 #################################
 
-function init {
+function __init {
 
     if [ -e "./.deploy-options.sh" ]; then
         echo "Options file already exists."

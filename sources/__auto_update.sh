@@ -2,7 +2,7 @@
 #            UPDATE             #
 #################################
 
-function script_auto_update {
+function __script_auto_update {
     echo 
     echo "Please wait until main script is finished with updating..."
     echo
