@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# Defines the version of workflow supported by this script. Currently, two versions are available, v1 and v2.
+#
+# v1 #
+# An old workflow where the local script will ask you for the app version. 
+# The script will generate the next build number that can be used on the CI/CD.
+# Each selected environment will get its tag, e.g., for Staging and UAT, you'll get two tags internal-staging/v1.0.0-1 and internal-uat/v1.0.0-1
+#
+# v2 #
+# New workflow, where the local script is used only as a CI/CD trigger.
+# The script will not generate a build number or ask you for the app version.
+# Each selected environment is concatenated into one tag. The tag will always start with `ci/` and end with `/{timestamp}.` E.g., ci/internal-staging/internal-uat/{timestamp}
+#
+# By default, this option is set to new workflow - v2
+script_version=v2
 # If enabled, console will be cleared on every script run.
 # By default, this option is enabled
 use_automatic_console_clean=true
@@ -46,15 +60,15 @@ function deploy_options {
     echo
     echo "=================="
     echo
-    echo "---------------------"
-    echo "| APP STORE CONNECT |"
-    echo "---------------------"
+    echo "---------"
+    echo "| STORE |"
+    echo "---------"
     echo
-    echo "[3] App Store"
+    echo "[3] App/Play Store"
     echo
     read -r -p "Enter number in square brackets: " target_selection
 
-        # Array for creating first part of the tag.
+    # Array for creating first part of the tag.
     # Should be in sync with options shown to the user.
-    environments=("internal-staging" "internal-uat" "internal-production" "appstore")
+    environments=("internal-staging" "internal-uat" "internal-production" "store")
 }
