@@ -18,7 +18,9 @@ function __push_tag_and_start_deploy {
     echo "---------------------------------------------------------------"
     echo "                      ~ CONFIGURATION ~   "
     echo
-    echo "Version: ${bold}v$appversion-$tags_count${normal}"        
+    if [ -n "$appversion" ]; then
+        echo "Version: ${bold}v$appversion-$tags_count${normal}"        
+    fi
     for tag in "${tags_to_deploy[@]}"; do
         echo "Tag: ${bold}$tag${normal}"
     done

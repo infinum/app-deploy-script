@@ -20,6 +20,7 @@ function __input_to_tags {
 }
 
 # Generate app version and build number
+# Used in v1 version of the script
 function __create_app_version_and_build_number {
 
     echo
@@ -66,6 +67,28 @@ function __create_app_version_and_build_number {
     echo
     echo "Next app version is: ${bold}v$appversion-$tags_count${normal}"
     sleep 1
+}
+
+# Generate trigger tag with timestamp
+# Used in v2 version of the script
+function __create_trigger_ci_timestamp_tag {
+
+    # Create tag name ci/{environment}/{timestamp}}. E.g. ci/internal-staging/2024-12-05T17-16-28
+    tags_to_deploy=()
+
+    # Prefix ci
+    trigger_tag="ci/"
+
+    # Environments
+    for target in "${environments_to_build[@]}"; do
+        trigger_tag+="$target/"
+    done
+
+    # Sufix timestamp 
+    trigger_tag+="$(date +%Y-%m-%dT%H-%M-%S)"
+
+    # Assign to shared property
+    tags_to_deploy=("$trigger_tag")
 }
 
 # Changelog

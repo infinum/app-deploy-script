@@ -13,11 +13,9 @@ source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
 #          Script used for creating the specific              #
 #        tag used for triggering the CI deployment            #
 #                                                             #
-#               End tag should look like this:                #
-#                  internal-all/v1.0.0-1234                   #
 #                                                             #
 #                Prepared by Jasmin Abou Aldan                #
-#       Copyright (c) 2020 Infinum. All rights reserved.      #
+#       Copyright (c) 2024 Infinum. All rights reserved.      #
 ###############################################################
 
 # Use global variables at your own risk as this can be overridden in the future.
@@ -45,7 +43,12 @@ function main {
 
     deploy_options # Get from .deploy-options.sh, setup per project
     __input_to_tags
-    __create_app_version_and_build_number
+
+    if [ -z "$script_version" ] || [ "$script_version" == "v1" ]; then
+        __create_app_version_and_build_number
+    elif [ "$script_version" == "v2" ]; then
+        __create_trigger_ci_timestamp_tag
+    fi
 
     # CREATE CHANGELOG
 
