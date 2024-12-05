@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source ./.deploy-options.sh
+source /usr/local/bin/app-deploy-helpers/auto_update.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -264,27 +265,6 @@ function push_tag {
         echo "------------------------------------------------------------"
         exit 7
     fi
-}
-
-#################################
-#            UPDATE             #
-#################################
-
-function script_auto_update {
-    echo 
-    echo "Please wait until main script is finished with updating..."
-    echo
-    echo "Fetching new data..."
-    if [ ! -d ".app_deploy_tmp" ]; then
-        mkdir .app_deploy_tmp
-    fi
-    git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
-    echo "Updating..."
-    cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
-    echo "Cleaning temporary files..."
-    rm -rf .app_deploy_tmp
-    echo "Updating finished!"
-    exit 0
 }
 
 #################################

@@ -25,16 +25,32 @@ if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
 fi
 echo
 echo "Fetching script data..."
-mkdir .app_deploy_tmp
-git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
-echo "Installing..."
-cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
 
-if ! [ -f ./.deploy-options.sh ]; then
-	cat .app_deploy_tmp/deploy-options.sh > ./.deploy-options.sh
+# Create temp folder
+if [ ! -d ".app_deploy_tmp" ]; then
+    mkdir .app_deploy_tmp
+else
+    rm -rf .app_deploy_tmp
 fi
 
+# Get install files
+git clone --quiet https://github.com/infinum/app-deploy-script.git --branch feature/v2/local-trigger .app_deploy_tmp
+echo "Installing..."
+
+# Move main script to bin folder
+cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
+
+# Move helpers to helpers folder inside bin
+if [ ! -d "/usr/local/bin/app-deploy-helpers" ]; then
+    mkdir /usr/local/bin/app-deploy-helpers/
+fi
+cp -a .app_deploy_tmp/sources/. /usr/local/bin/app-deploy-helpers/
+
+# Add permission to read files
 chmod +rx /usr/local/bin/app-deploy
+chmod +rx /usr/local/bin/app-deploy-helpers/
+
+# Remove temp install folder
 rm -rf .app_deploy_tmp
 
 echo "Done!"
