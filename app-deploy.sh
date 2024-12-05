@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 source ./.deploy-options.sh
-source /usr/local/bin/app-deploy-helpers/__auto_update.sh
-source /usr/local/bin/app-deploy-helpers/__init.sh
+source /usr/local/bin/.app-deploy-sources/__auto_update.sh
+source /usr/local/bin/.app-deploy-sources/__init.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #

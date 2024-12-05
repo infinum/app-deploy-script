@@ -41,14 +41,14 @@ echo "Installing..."
 cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
 
 # Move helpers to helpers folder inside bin
-if [ ! -d "/usr/local/bin/app-deploy-helpers" ]; then
-    mkdir /usr/local/bin/app-deploy-helpers/
+if [ ! -d "/usr/local/bin/.app-deploy-sources" ]; then
+    mkdir /usr/local/bin/.app-deploy-sources/
 fi
-cp -a .app_deploy_tmp/sources/. /usr/local/bin/app-deploy-helpers/
+cp -a .app_deploy_tmp/sources/. /usr/local/bin/.app-deploy-sources/
 
 # Add permission to read files
 chmod +rx /usr/local/bin/app-deploy
-chmod +rx /usr/local/bin/app-deploy-helpers/
+chmod +rx /usr/local/bin/.app-deploy-sources/
 
 # Remove temp install folder
 rm -rf .app_deploy_tmp

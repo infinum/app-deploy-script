@@ -21,7 +21,7 @@ function __script_auto_update {
 
     # Move new data to bin / helpers
     cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
-    cp -a .app_deploy_tmp/sources/. /usr/local/bin/app-deploy-helpers/
+    cp -a .app_deploy_tmp/sources/. /usr/local/bin/.app-deploy-sources/
 
     # Remove temp folder
     rm -rf .app_deploy_tmp
