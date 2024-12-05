@@ -2,6 +2,7 @@
 
 source ./.deploy-options.sh
 source /usr/local/bin/app-deploy-helpers/auto_update.sh
+source /usr/local/bin/app-deploy-helpers/init.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -282,8 +283,10 @@ echo "#                   Copyright (c) 2020 Infinum.               #"
 echo "###############################################################"
 echo
 
-if ! [ "$1" == '--update' ] ; then
-    main
-else 
+if [ "$1" == '--update' ] ; then
     script_auto_update
+elif [ "$1" == 'init' ] ; then
+    init
+else
+    main 
 fi
