@@ -67,15 +67,14 @@ function main {
 #       START EVERYTHING        #
 #################################
 
-if $use_automatic_console_clean ; then
-    clear
-fi
-
 if [ "$1" == '--update' ] ; then
+    __clear_console
     __script_auto_update
 elif [ "$1" == 'init' ] ; then
+    __clear_console
     __init
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
+    __clear_console
     main
 elif [ "$1" == 'environments' ] ; then
     echo $(__env_extractor "$2")

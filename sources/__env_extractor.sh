@@ -17,16 +17,10 @@ function __env_extractor {
 
     if [[ $1 =~ ^$TRIGGER_TAG_PREFIX(.+)/$TRIGGER_TAG_SUFIX_REGEX$ ]]; then
         paths="${BASH_REMATCH[1]}"
-  
+
         # Split the captured paths into individual words
         IFS='/' read -ra words <<< "$paths"
-  
-        for env in "${words[@]}"; do
-            ENVIRONMENTS+="$env"$'\n'
-        done
-
-        # Remove last empty line
-        echo "$ENVIRONMENTS"
+        echo "$(IFS=$'\n'; echo "${words[*]}")"
     else
         echo
         echo "Incorrect input value."
