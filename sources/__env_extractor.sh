@@ -26,7 +26,6 @@ function __env_extractor {
         done
 
         # Remove last empty line
-        ENVIRONMENTS=$(echo -n "$ENVIRONMENTS")
         echo "$ENVIRONMENTS"
     else
         echo
