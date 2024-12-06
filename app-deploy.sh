@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 source ./.deploy-options.sh
+source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
 source /usr/local/bin/.app-deploy-sources/__initial_checkup.sh
 source /usr/local/bin/.app-deploy-sources/__base_tag_handling.sh
 source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
+source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -34,6 +36,8 @@ normal=$(tput sgr0)
 # to edit any part of it as suits your needs.
 
 function main {
+
+    __header_print
 
     # BASE INFO
     # commit, tag, synced head,...
@@ -66,13 +70,6 @@ function main {
 if $use_automatic_console_clean ; then
     clear
 fi
-echo
-echo "###############################################################"
-echo "#                         DEPLOY SCRIPT                       #"
-echo "#                                                             #"
-echo "#                   Copyright (c) 2024 Infinum.               #"
-echo "###############################################################"
-echo
 
 if [ "$1" == '--update' ] ; then
     __script_auto_update
@@ -80,6 +77,8 @@ elif [ "$1" == 'init' ] ; then
     __init
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     main
+elif [ "$1" == 'environments' ] ; then
+    __env_extractor "$2"
 else
     echo
     echo "Unsuported command!"

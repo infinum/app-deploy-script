@@ -1,8 +1,12 @@
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+
 #################################
 #            UPDATE             #
 #################################
 
 function __script_auto_update {
+
+    __header_print
     echo 
     echo "Please wait until main script is finished with updating..."
     echo
