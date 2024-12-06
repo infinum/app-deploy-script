@@ -78,7 +78,7 @@ elif [ "$1" == 'init' ] ; then
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     main
 elif [ "$1" == 'environments' ] ; then
-    __env_extractor "$2"
+    echo $(__env_extractor "$2")
 else
     echo
     echo "Unsuported command!"
