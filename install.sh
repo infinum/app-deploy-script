@@ -19,7 +19,7 @@ normal=$(tput sgr0)
 echo "==> ${bold}This script will install:${normal}"
 echo "/usr/local/bin/app-deploy"
 echo
-if [[ $1 =~ "--silent" ]]; then
+if ! [[ $1 == "--silent" ]]; then
     read -r -p "Do you want to proceed? [y/n] " c
     if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
         exit 1
