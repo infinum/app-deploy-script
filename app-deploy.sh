@@ -78,6 +78,11 @@ if [ "$1" == '--update' ] ; then
     __script_auto_update
 elif [ "$1" == 'init' ] ; then
     __init
+elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
+    main
 else
-    main 
+    echo
+    echo "Unsuported command!"
+    echo
+    exit 0
 fi
