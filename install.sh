@@ -38,7 +38,7 @@ else
 fi
 
 # Get install files
-git clone --quiet https://github.com/infinum/app-deploy-script.git --branch feature/v2/environments-export .app_deploy_tmp
+git clone --quiet https://github.com/infinum/app-deploy-script.git --branch feature/v2/build-tag-creation .app_deploy_tmp
 echo "Installing..."
 
 # Move main script to bin folder
