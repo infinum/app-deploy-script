@@ -35,7 +35,7 @@ function __build_tagging {
     fi
 
     echo "Tag:"
-    echo "${ENVIRONMENT}/${APP_VERSION}b${BUILD_VERSION}"
+    echo "${ENVIRONMENT}/v${APP_VERSION}b${BUILD_VERSION}"
 }
 
 # Validation and checks
