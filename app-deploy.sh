@@ -11,6 +11,7 @@ source /usr/local/bin/.app-deploy-sources/__initial_checkup.sh
 source /usr/local/bin/.app-deploy-sources/__base_tag_handling.sh
 source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
 source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
+source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -41,6 +42,8 @@ elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __trigger_deploy
 elif [ "$1" == 'environments' ] ; then
     __env_extractor "$2"
+elif [ "$1" == 'tagging' ]; then
+    __build_tagging "$@"
 else
     echo
     echo "Unsuported command!"
