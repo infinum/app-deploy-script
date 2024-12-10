@@ -70,14 +70,18 @@ function main {
 if [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
+    exit 0
 elif [ "$1" == 'init' ] ; then
     __clear_console
     __init
+    exit 0
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __clear_console
     main
+    exit 0
 elif [ "$1" == 'environments' ] ; then
-    echo $(__env_extractor "$2")
+    __env_extractor "$2"
+    exit 0
 else
     echo
     echo "Unsuported command!"
