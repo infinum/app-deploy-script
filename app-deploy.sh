@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-if [ -f ./.deploy-options.sh ]; then
+if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
+    source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
@@ -24,72 +25,25 @@ source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
 
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
-bold=$(tput bold)
-normal=$(tput sgr0)
-
-#################################
-#             MAIN              #
-#################################
-
-# Private part of the script...
-#
-# In general, you don't have to edit
-# this part of the script but feel free
-# to edit any part of it as suits your needs.
-
-function main {
-
-    __header_print
-
-    # BASE INFO
-    # commit, tag, synced head,...
-    __initial_checkup
-
-    # CREATE TAG
-
-    deploy_options # Get from .deploy-options.sh, setup per project
-    __input_to_tags
-
-    if [ -z "$script_version" ] || [ "$script_version" == "v1" ]; then
-        __create_app_version_and_build_number
-    elif [ "$script_version" == "v2" ]; then
-        __create_trigger_ci_timestamp_tag
-    fi
-
-    # CREATE CHANGELOG
-
-    __generate_tag_and_changelog
-        
-    # DEPLOY
-        
-    __push_tag_and_start_deploy
-}
 
 #################################
 #       START EVERYTHING        #
 #################################
 
-echo "STARD SCRIPT"
-
 if [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
-    exit 0
 elif [ "$1" == 'init' ] ; then
     __clear_console
     __init
-    exit 0
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __clear_console
-    main
-    exit 0
+    __trigger_deploy
 elif [ "$1" == 'environments' ] ; then
-    echo "EXTRACT ENV"
     __env_extractor "$2"
-    exit 0
 else
     echo
     echo "Unsuported command!"
     echo
-    exit 0
+    exit 29
 fi
