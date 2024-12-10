@@ -6,6 +6,8 @@ source /usr/local/bin/.app-deploy-sources/__constants.sh
 
 function __env_extractor {
 
+    echo "ENV EXTRACTOR CALLED"
+
     # Check if input is valid
     if [ -z "$1" ] ; then 
         echo "Missing input value!"

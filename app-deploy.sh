@@ -69,6 +69,8 @@ function main {
 #       START EVERYTHING        #
 #################################
 
+echo "STARD SCRIPT"
+
 if [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
@@ -82,6 +84,7 @@ elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     main
     exit 0
 elif [ "$1" == 'environments' ] ; then
+    echo "EXTRACT ENV"
     __env_extractor "$2"
     exit 0
 else
