@@ -17,14 +17,15 @@ function __build_tagging {
     echo "Path -> $APP_PATH"
     echo "Build version -> $BUILD_VERSION"
 
-    APP_PLATFORM=$(__check_platform)
+    APP_VERSION=""
 
+    APP_PLATFORM=$(__check_platform)
     if [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_APK" ]; then
         __generate_app_version_from_apk "$APP_PATH"
     elif [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_AAB" ]; then
         __generate_app_version_from_aab "$APP_PATH"
     elif [ "$APP_PLATFORM" == "$PLATFORM_IOS" ]; then
-        __generate_app_version_from_ipa "$APP_PATH"
+        APP_VERSION=$(__generate_app_version_from_ipa "$APP_PATH")
     else
         echo
         echo "Unsupported file format: ${APP_PATH##*.}"
@@ -32,6 +33,9 @@ function __build_tagging {
         echo
         exit 1
     fi
+
+    echo "Tag:"
+    echo "${ENVIRONMENT}/${APP_VERSION}b${BUILD_VERSION}"
 }
 
 # Validation and checks
