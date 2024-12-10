@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-source ./.deploy-options.sh
+if [ -f ./.deploy-options.sh ]; then
+    source ./.deploy-options.sh
+fi
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
