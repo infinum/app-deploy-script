@@ -12,13 +12,7 @@ function __build_tagging {
 
     __validate_options "$@"
 
-
-    echo "Env -> $ENVIRONMENT"
-    echo "Path -> $APP_PATH"
-    echo "Build version -> $BUILD_VERSION"
-
     APP_VERSION=""
-
     APP_PLATFORM=$(__check_platform)
     if [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_APK" ]; then
         APP_VERSION=$(__generate_app_version_from_apk "$APP_PATH" "$BUILD_VERSION")
@@ -34,8 +28,10 @@ function __build_tagging {
         exit 1
     fi
 
-    echo "Tag:"
-    echo "${ENVIRONMENT}/v${APP_VERSION}"
+    CHANGELOG=${CHANGELOG:-""} # Set empty string if changelog is not available
+    TAG="${ENVIRONMENT}/v${APP_VERSION}"
+    git tag -a "$TAG" -m "${CHANGELOG}"
+    git push origin "$TAG"
 }
 
 # Validation and checks
@@ -43,11 +39,12 @@ function __build_tagging {
 function __validate_options {
     shift
 
-    while getopts "e:p:v:" opt; do
+    while getopts "e:p:v:c:" opt; do
         case "$opt" in
             e) ENVIRONMENT="$OPTARG" ;;
             p) APP_PATH="$OPTARG" ;;
             v) BUILD_VERSION="$OPTARG" ;;
+            c) CHANGELOG="$OPTARG" ;;
             *) echo "Error: Invalid option"; exit 1 ;;
         esac
     done
