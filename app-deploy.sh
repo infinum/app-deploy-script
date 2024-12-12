@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+source /usr/local/bin/.app-deploy-sources/__help.sh
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi
-source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
 source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
@@ -28,7 +29,9 @@ set -e
 #       START EVERYTHING        #
 #################################
 
-if [ "$1" == '--update' ] ; then
+if [ "$1" == '--help' ] ; then
+    __help
+elif [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
 elif [ "$1" == 'init' ] ; then
