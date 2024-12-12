@@ -7,9 +7,6 @@ fi
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
-source /usr/local/bin/.app-deploy-sources/__initial_checkup.sh
-source /usr/local/bin/.app-deploy-sources/__base_tag_handling.sh
-source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
 source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
 source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 

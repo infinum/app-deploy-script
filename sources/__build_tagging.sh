@@ -1,6 +1,6 @@
 source /usr/local/bin/.app-deploy-sources/__constants.sh
-source /usr/local/bin/.app-deploy-sources/__build_tagging_ios.sh
-source /usr/local/bin/.app-deploy-sources/__build_tagging_android.sh
+source /usr/local/bin/.app-deploy-sources/helpers/__build_tagging_ios.sh
+source /usr/local/bin/.app-deploy-sources/helpers/__build_tagging_android.sh
 
 #################################
 #        CREATE BUILD TAG       #
