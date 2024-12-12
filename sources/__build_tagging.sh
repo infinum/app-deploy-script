@@ -20,10 +20,11 @@ function __build_tagging {
         APP_VERSION=$(__generate_app_version_from_aab "$APP_PATH" "$BUILD_COUNT")
     elif [ "$APP_PLATFORM" == "$PLATFORM_IOS" ]; then
         APP_VERSION=$(__generate_app_version_from_ipa "$APP_PATH" "$BUILD_COUNT")
-    else
+    elif [[ ! -n "$CUSTOM_APP_VERSION" ]]; then
         echo
         echo "Unsupported file format: ${APP_PATH##*.}"
-        echo "Please use only supported file formats: apk, aab, or ipa"
+        echo "If unsupported file format is used (i.e., none of apk, aab, or ipa),"
+        echo "you have to define the custom app version (option -v)."
         echo
         exit 1
     fi
