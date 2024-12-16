@@ -20,6 +20,8 @@ set -e
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+VERSION="1.1.1"
+
 #################################
 #             MAIN              #
 #################################
@@ -302,8 +304,10 @@ echo "#                   Copyright (c) 2020 Infinum.               #"
 echo "###############################################################"
 echo
 
-if ! [ "$1" == '--update' ] ; then
-    main
-else 
+if  [ "$1" == '--update' ] ; then
     script_auto_update
+elif [ "$1" == '-v' ] || [ "$1" == '--version' ] ; then
+    echo "$VERSION"
+else
+    main
 fi
