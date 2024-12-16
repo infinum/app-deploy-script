@@ -25,12 +25,16 @@ source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
+VERSION="2.0.0"
+
 #################################
 #       START EVERYTHING        #
 #################################
 
-if [ "$1" == '--help' ] ; then
+if [ "$1" == '-h' ] || [ "$1" == '--help' ] ; then
     __help
+elif [ "$1" == '-v' ] || [ "$1" == '--version' ] ; then
+    echo "app-deploy $VERSION"
 elif [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
