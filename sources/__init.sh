@@ -6,7 +6,7 @@ function __init {
 
     if [ -e "./.deploy-options.sh" ]; then
         echo "Options file already exists."
-        echo "If you continue, stored options will be overriden!"
+        echo "If you continue, stored options will be overridden!"
         echo
         read -r -p "Do you want to proceed? [y/n] " c
         if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
