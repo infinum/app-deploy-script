@@ -1,3 +1,5 @@
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+
 #################################
 #   EXTRACT DATA FROM APK/AAB   #
 #################################
@@ -13,7 +15,7 @@ function __generate_app_version_from_apk {
 function __generate_app_version_from_aab {
     temp_path=$PWD
     bundletool="${temp_path}/bundletool.jar"
-    source="https://github.com/google/bundletool/releases/download/1.17.2/bundletool-all-1.17.2.jar"
+    source="https://github.com/google/bundletool/releases/download/${BUNDLE_TOOL_VERSION}/bundletool-all-1.17.2.jar"
 
     wget -q -nv "${source}" --output-document="${bundletool}" &
     wait
