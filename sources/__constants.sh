@@ -23,3 +23,4 @@ TRIGGER_TAG_SUFIX_REGEX=([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2})
 PLATFORM_ANDROID_APK="platform_android_apk"
 PLATFORM_ANDROID_AAB="platform_android_aab"
 PLATFORM_IOS="platform_ios"
+BUNDLE_TOOL_VERSION="1.17.2"
