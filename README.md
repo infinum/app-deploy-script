@@ -49,6 +49,8 @@ app-deploy --update
 
 > Script commands such as `install`, and `--update` will need `sudo` to execute successfully. Use it when requested.
 
+For more details on migrating from v1 to v2, please check the [Migration from v1 to v2](https://github.com/infinum/app-deploy-script/wiki/Migration-from-v1-to-v2) guidelines.
+
 ## Usage
 
 For detailed usage documentation, please check the [wiki pages](https://github.com/infinum/app-deploy-script/wiki).
