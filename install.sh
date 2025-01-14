@@ -19,23 +19,43 @@ normal=$(tput sgr0)
 echo "==> ${bold}This script will install:${normal}"
 echo "/usr/local/bin/app-deploy"
 echo
-read -r -p "Do you want to proceed? [y/n] " c
-if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
-    exit 1
+
+if ! [[ "$0" == "--silent" ]]; then
+    read -r -p "Do you want to proceed? [y/n] " c
+    if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
+        exit 1
+    fi
 fi
+
 echo
 echo "Fetching script data..."
-mkdir .app_deploy_tmp
-git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
-echo "Installing..."
-cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
 
-if ! [ -f ./.deploy-options.sh ]; then
-	cat .app_deploy_tmp/deploy-options.sh > ./.deploy-options.sh
+# Create temp folder
+if [ ! -d ".app_deploy_tmp" ]; then
+    mkdir .app_deploy_tmp
+else
+    trap "rm -rf .app_deploy_tmp" EXIT
 fi
 
+# Get install files
+git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
+echo "Installing..."
+
+# Move main script to bin folder
+cat .app_deploy_tmp/app-deploy.sh > /usr/local/bin/app-deploy
+
+# Move helpers to helpers folder inside bin
+if [ ! -d "/usr/local/bin/.app-deploy-sources" ]; then
+    mkdir /usr/local/bin/.app-deploy-sources/
+fi
+cp -a .app_deploy_tmp/sources/. /usr/local/bin/.app-deploy-sources/
+
+# Add permission to read files
 chmod +rx /usr/local/bin/app-deploy
-rm -rf .app_deploy_tmp
+chmod +rx /usr/local/bin/.app-deploy-sources/
+
+# Remove temp install folder
+trap "rm -rf .app_deploy_tmp" EXIT
 
 echo "Done!"
 exit 0
