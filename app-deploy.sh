@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-source ./.deploy-options.sh
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+source /usr/local/bin/.app-deploy-sources/__help.sh
+if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
+    source ./.deploy-options.sh
+    source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
+fi
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
-source /usr/local/bin/.app-deploy-sources/__initial_checkup.sh
-source /usr/local/bin/.app-deploy-sources/__base_tag_handling.sh
-source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
+source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
+source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -20,69 +24,33 @@ source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
 
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
-bold=$(tput bold)
-normal=$(tput sgr0)
 
-#################################
-#             MAIN              #
-#################################
-
-# Private part of the script...
-#
-# In general, you don't have to edit
-# this part of the script but feel free
-# to edit any part of it as suits your needs.
-
-function main {
-
-    # BASE INFO
-    # commit, tag, synced head,...
-    __initial_checkup
-
-    # CREATE TAG
-
-    deploy_options # Get from .deploy-options.sh, setup per project
-    __input_to_tags
-
-    if [ -z "$script_version" ] || [ "$script_version" == "v1" ]; then
-        __create_app_version_and_build_number
-    elif [ "$script_version" == "v2" ]; then
-        __create_trigger_ci_timestamp_tag
-    fi
-
-    # CREATE CHANGELOG
-
-    __generate_tag_and_changelog
-        
-    # DEPLOY
-        
-    __push_tag_and_start_deploy
-}
+VERSION="2.0.0"
 
 #################################
 #       START EVERYTHING        #
 #################################
 
-if $use_automatic_console_clean ; then
-    clear
-fi
-echo
-echo "###############################################################"
-echo "#                         DEPLOY SCRIPT                       #"
-echo "#                                                             #"
-echo "#                   Copyright (c) 2024 Infinum.               #"
-echo "###############################################################"
-echo
-
-if [ "$1" == '--update' ] ; then
+if [ "$1" == '-h' ] || [ "$1" == '--help' ] ; then
+    __help
+elif [ "$1" == '-v' ] || [ "$1" == '--version' ] ; then
+    echo "app-deploy $VERSION"
+elif [ "$1" == '--update' ] ; then
+    __clear_console
     __script_auto_update
 elif [ "$1" == 'init' ] ; then
+    __clear_console
     __init
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
-    main
+    __clear_console
+    __trigger_deploy
+elif [ "$1" == 'environments' ] ; then
+    __env_extractor "$2"
+elif [ "$1" == 'tagging' ]; then
+    __build_tagging "$@"
 else
     echo
     echo "Unsuported command!"
     echo
-    exit 0
+    exit 29
 fi

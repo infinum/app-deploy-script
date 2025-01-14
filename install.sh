@@ -19,10 +19,14 @@ normal=$(tput sgr0)
 echo "==> ${bold}This script will install:${normal}"
 echo "/usr/local/bin/app-deploy"
 echo
-read -r -p "Do you want to proceed? [y/n] " c
-if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
-    exit 1
+
+if ! [[ "$0" == "--silent" ]]; then
+    read -r -p "Do you want to proceed? [y/n] " c
+    if ! [[ ${c} =~ ^(yes|y|Y) ]] || [ -z ${c} ]; then
+        exit 1
+    fi
 fi
+
 echo
 echo "Fetching script data..."
 
@@ -30,11 +34,11 @@ echo "Fetching script data..."
 if [ ! -d ".app_deploy_tmp" ]; then
     mkdir .app_deploy_tmp
 else
-    rm -rf .app_deploy_tmp
+    trap "rm -rf .app_deploy_tmp" EXIT
 fi
 
 # Get install files
-git clone --quiet https://github.com/infinum/app-deploy-script.git --branch feature/v2/local-trigger .app_deploy_tmp
+git clone --quiet https://github.com/infinum/app-deploy-script.git .app_deploy_tmp
 echo "Installing..."
 
 # Move main script to bin folder
@@ -51,7 +55,7 @@ chmod +rx /usr/local/bin/app-deploy
 chmod +rx /usr/local/bin/.app-deploy-sources/
 
 # Remove temp install folder
-rm -rf .app_deploy_tmp
+trap "rm -rf .app_deploy_tmp" EXIT
 
 echo "Done!"
 exit 0

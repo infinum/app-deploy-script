@@ -1,8 +1,12 @@
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+
 #################################
 #       INIT NEW PROJECT        #
 #################################
 
 function __init {
+
+    __header_print
 
     if [ -e "./.deploy-options.sh" ]; then
         echo "Options file already exists."

@@ -1,3 +1,5 @@
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+
 #################################
 #          CREATE TAG           #
 #################################
@@ -77,7 +79,7 @@ function __create_trigger_ci_timestamp_tag {
     tags_to_deploy=()
 
     # Prefix ci
-    trigger_tag="ci/"
+    trigger_tag="$TRIGGER_TAG_PREFIX"
 
     # Environments
     for target in "${environments_to_build[@]}"; do
@@ -85,7 +87,7 @@ function __create_trigger_ci_timestamp_tag {
     done
 
     # Sufix timestamp 
-    trigger_tag+="$(date +%Y-%m-%dT%H-%M-%S)"
+    trigger_tag+="$TRIGGER_TAG_SUFIX"
 
     # Assign to shared property
     tags_to_deploy=("$trigger_tag")
