@@ -66,7 +66,9 @@ function deploy_options {
     echo
     echo "[3] App/Play Store"
     echo
-    read -r -p "Enter number in square brackets: " target_selection
+    echo "Enter number written in the square brackets."
+    echo "To run multiple targets, write multiple numbers separated by empty space (e.g. Enter targets: 0 3)"
+    read -r -p "Enter targets: " target_selection
 
     # Array for creating first part of the tag.
     # Should be in sync with options shown to the user.
