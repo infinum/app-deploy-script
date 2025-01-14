@@ -34,7 +34,7 @@ echo "Fetching script data..."
 if [ ! -d ".app_deploy_tmp" ]; then
     mkdir .app_deploy_tmp
 else
-    rm -rf .app_deploy_tmp
+    trap "rm -rf .app_deploy_tmp" EXIT
 fi
 
 # Get install files
@@ -55,7 +55,7 @@ chmod +rx /usr/local/bin/app-deploy
 chmod +rx /usr/local/bin/.app-deploy-sources/
 
 # Remove temp install folder
-rm -rf .app_deploy_tmp
+trap "rm -rf .app_deploy_tmp" EXIT
 
 echo "Done!"
 exit 0

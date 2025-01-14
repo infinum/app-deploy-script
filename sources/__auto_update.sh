@@ -16,7 +16,7 @@ function __script_auto_update {
     if [ ! -d ".app_deploy_tmp" ]; then
         mkdir .app_deploy_tmp
     else
-        rm -rf .app_deploy_tmp
+        trap "rm -rf .app_deploy_tmp" EXIT
     fi
 
     # Get new data
@@ -28,7 +28,7 @@ function __script_auto_update {
     cp -a .app_deploy_tmp/sources/. /usr/local/bin/.app-deploy-sources/
 
     # Remove temp folder
-    rm -rf .app_deploy_tmp
+    trap "rm -rf .app_deploy_tmp" EXIT
     
     echo "Updated to $VERSION!"
     exit 0

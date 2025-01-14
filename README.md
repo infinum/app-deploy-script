@@ -1,8 +1,14 @@
 # App Deploy Script
 
-## Description
+A group of scripts facilitates mobile app deployment over CI with the following features:
+- Initialize deploy options
+- Extract environments from a trigger tag
+- Creating trigger tags for starting a specific deployment workflow on the CI
+- Creating final build tags by extracting environment and version data from the trigger tag and the resulting binary. 
 
-Deploy script used for creating trigger tags with a tag message in the format `ci/internal-staging/2024-12-16T10-16`, where `internal-staging` is marking the workflow that should be started on the CI. The tag message set from this script can be used later for the changelog message on any CI (e.g., Bitrise). Once the build process is finished on CI/CD and the installation file is uploaded to the deployment service (e.g., TryOut Apps), an additional script is available for creating the final build tag in format `internal-staging/v1.0.0-45b46`, where `internal-staging` is marking the build type (i.e., internal for TryOut Apps, or store for App/Play Store; staging for target/flavor type), `v1.0.0-45` represents the build version (app version, build number, ...), and `b46` that represents the unique build count on CI/CD. Optionally, on some platforms, an additional value `cXX` (e.g., `c100`) can represent the code version.
+Trigger tags use the following format: `ci/internal-staging/2024-12-16T10-16`, where `internal-staging` should match the trigger condition for starting the appropriate workflow on the CI. The tag message set from this script can be used later for the changelog message on any CI (e.g., Bitrise). 
+
+Once the build process is finished on CI/CD and the installation file is uploaded to the deployment service, an additional script is available for creating the final build tag in format `internal-staging/v1.0.0-45b46`, where `internal-staging` is marking the build type (i.e., internal for TryOut Apps, or store for App/Play Store; staging for target/flavor type), `v1.0.0-45` represents the build version (app version, build number, ...), and `b46` that represents the unique build count on CI/CD. Optionally, an additional value, `cXX` (e.g., `c100`), can represent the code version on some platforms.
 
 ## Table of contents
 
