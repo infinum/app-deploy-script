@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
+source /usr/local/bin/.app-deploy-sources/__constants.sh
+source /usr/local/bin/.app-deploy-sources/__help.sh
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi
-source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
 source /usr/local/bin/.app-deploy-sources/__init.sh
-source /usr/local/bin/.app-deploy-sources/__initial_checkup.sh
-source /usr/local/bin/.app-deploy-sources/__base_tag_handling.sh
-source /usr/local/bin/.app-deploy-sources/__deploy_tags.sh
 source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
+source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -26,11 +25,17 @@ source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
+VERSION="2.0.0"
+
 #################################
 #       START EVERYTHING        #
 #################################
 
-if [ "$1" == '--update' ] ; then
+if [ "$1" == '-h' ] || [ "$1" == '--help' ] ; then
+    __help
+elif [ "$1" == '-v' ] || [ "$1" == '--version' ] ; then
+    echo "app-deploy $VERSION"
+elif [ "$1" == '--update' ] ; then
     __clear_console
     __script_auto_update
 elif [ "$1" == 'init' ] ; then
@@ -41,6 +46,8 @@ elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __trigger_deploy
 elif [ "$1" == 'environments' ] ; then
     __env_extractor "$2"
+elif [ "$1" == 'tagging' ]; then
+    __build_tagging "$@"
 else
     echo
     echo "Unsuported command!"
