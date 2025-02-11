@@ -43,7 +43,7 @@ function __create_app_version_and_build_number {
     fi
 
     if ! [[ "$appversion" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-    then 
+    then
         echo "App version is in wrong format (use M.m.p format, e.g. 1.0.0). Aborting..."
         exit 5
     fi
@@ -86,27 +86,58 @@ function __create_trigger_ci_timestamp_tag {
         trigger_tag+="$target/"
     done
 
-    # Sufix timestamp 
+    # Sufix timestamp
     trigger_tag+="$TRIGGER_TAG_SUFIX"
 
     # Assign to shared property
     tags_to_deploy=("$trigger_tag")
 }
 
+function __changelog_generator_exists {
+    if ! declare -f generate_changelog > /dev/null; then
+        return 1
+    fi
+
+    return 0
+}
+
 # Changelog
 function __generate_tag_and_changelog {
-
     echo
     echo "###############################################################"
     echo "#                          CHANGELOG                          #"
     echo "###############################################################"
     echo
+
+    # Generate changelog
+
+    if __changelog_generator_exists; then
+        echo "------------------------------------------------------------"
+        echo "Generating changelog message..."
+        echo "------------------------------------------------------------"
+
+        CHANGELOG=""
+        generate_changelog # Result will be saved in CHANGELOG
+
+        if [[ ! -z "$CHANGELOG" ]]; then
+            for tag in "${tags_to_deploy[@]}"; do
+                git tag -a "$tag" -m "${CHANGELOG}"
+            done
+            return # No need to ask for changelog if one is generated
+        else
+            echo "Failed to generate changelog"
+            echo
+        fi
+    fi
+
+    # Enter changelog manually
+
     echo "------------------------------------------------------------"
     echo "Enter changelog message..."
     echo "------------------------------------------------------------"
     sleep 1
 
-    tag_message_added=0
+    local tag_message_added=0
     for tag in "${tags_to_deploy[@]}"; do
 
         if [ ${tag_message_added} -eq 1 ]; then

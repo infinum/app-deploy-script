@@ -4,6 +4,7 @@ source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__help.sh
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
+    source ./.changelog-generator.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi
 source /usr/local/bin/.app-deploy-sources/__auto_update.sh
