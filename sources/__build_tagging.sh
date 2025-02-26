@@ -63,11 +63,25 @@ function __validate_options {
         esac
     done
 
-    # Check if all mandatory options are provided
-    if [[ -z "$ENVIRONMENT" || -z "$APP_PATH" || -z "$BUILD_COUNT" ]]; then
-        echo "Error: Missing mandatory options."
-        echo "Usage: app-deploy tagging -e \"environment_name\" -p \"path/to/app.{ipa/apk}\" -b \"{build count}\""
+    # Check if mandatory options are provided
+    if [[ -z "$ENVIRONMENT" ]]; then
+        echo "Error: Missing mandatory option -e (environment)."
+        echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
         echo "Example: app-deploy tagging -e \"internal-staging\" -p \"path/to/app.ipa\" -b \"42\""
+        exit 1
+    fi
+
+    # Check dependency between -p and -v
+    if [[ -z "$CUSTOM_APP_VERSION" && -z "$APP_PATH" ]]; then
+        echo "Error: Either -p (path) or -v (version) must be provided."
+        echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
+        exit 1
+    fi
+
+    # Ensure BUILD_COUNT is set (even if empty string is allowed)
+    if [[ ! -v BUILD_COUNT ]]; then
+        echo "Error: Missing mandatory option -b (build count)."
+        echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
         exit 1
     fi
 }
