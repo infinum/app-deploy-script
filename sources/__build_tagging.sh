@@ -12,21 +12,24 @@ function __build_tagging {
 
     __validate_options "$@"
 
-    APP_VERSION=""
-    APP_PLATFORM=$(__check_platform)
-    if [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_APK" ]; then
-        APP_VERSION=$(__generate_app_version_from_apk "$APP_PATH" "$BUILD_COUNT")
-    elif [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_AAB" ]; then
-        APP_VERSION=$(__generate_app_version_from_aab "$APP_PATH" "$BUILD_COUNT")
-    elif [ "$APP_PLATFORM" == "$PLATFORM_IOS" ]; then
-        APP_VERSION=$(__generate_app_version_from_ipa "$APP_PATH" "$BUILD_COUNT")
-    elif [[ ! -n "$CUSTOM_APP_VERSION" ]]; then
-        echo
-        echo "Unsupported file format: ${APP_PATH##*.}"
-        echo "If unsupported file format is used (i.e., none of apk, aab, or ipa),"
-        echo "you have to define the custom app version (option -v)."
-        echo
-        exit 1
+    # There is no custom app version, try to extract from passed installation file
+    if [[ -z "$CUSTOM_APP_VERSION" ]]; then
+        APP_VERSION=""
+        APP_PLATFORM=$(__check_platform)
+        if [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_APK" ]; then
+            APP_VERSION=$(__generate_app_version_from_apk "$APP_PATH" "$BUILD_COUNT")
+        elif [ "$APP_PLATFORM" == "$PLATFORM_ANDROID_AAB" ]; then
+            APP_VERSION=$(__generate_app_version_from_aab "$APP_PATH" "$BUILD_COUNT")
+        elif [ "$APP_PLATFORM" == "$PLATFORM_IOS" ]; then
+            APP_VERSION=$(__generate_app_version_from_ipa "$APP_PATH" "$BUILD_COUNT")
+        elif [[ ! -n "$CUSTOM_APP_VERSION" ]]; then
+            echo
+            echo "Unsupported file format: ${APP_PATH##*.}"
+            echo "If unsupported file format is used (i.e., none of apk, aab, or ipa),"
+            echo "you have to define the custom app version (option -v)."
+            echo
+            exit 1
+        fi
     fi
 
     __create_and_push_tag
@@ -35,14 +38,17 @@ function __build_tagging {
 # Tag creation & push
 
 function __create_and_push_tag {
-
+    
+    CALCULATED_APP_VERSION=""
     # If there is a custom app version passed, append build number to it
     if [[ -n "$CUSTOM_APP_VERSION" ]]; then
-        CUSTOM_APP_VERSION="${CUSTOM_APP_VERSION}b${BUILD_COUNT}"
+        SUFFIX=""
+        [[ -n "${BUILD_COUNT}" ]] && SUFFIX="b${BUILD_COUNT}"
+        CALCULATED_APP_VERSION="${CUSTOM_APP_VERSION}${SUFFIX}"
     fi
 
     CHANGELOG=${CHANGELOG:-""} # Set empty string if changelog is not available
-    TAG="${ENVIRONMENT}/v${CUSTOM_APP_VERSION:-$APP_VERSION}"
+    TAG="${ENVIRONMENT}/v${CALCULATED_APP_VERSION:-$APP_VERSION}"
     git tag -a "$TAG" -m "${CHANGELOG}"
     git push origin "$TAG"
 }
@@ -83,7 +89,8 @@ function __validate_options {
     fi
 
     # Ensure BUILD_COUNT is set (even if empty string is allowed)
-    if [[ ! -v BUILD_COUNT ]]; then
+    # Used older syntax (instead of [[ ! -v BUILD_COUNT ]]) as this -v was introduced in bash v4, while macOS comes with preinstalled v3
+    if ! declare -p BUILD_COUNT &>/dev/null; then
         echo "Error: Missing mandatory option -b (build count)."
         echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
         exit 1

@@ -9,7 +9,12 @@ function __generate_app_version_from_apk {
     APK_MANIFEST=$(aapt dump badging $1)
     VERSION_NAME=$(echo "$APK_MANIFEST" | sed -n "s/.*versionName='\([^']*\).*/\1/p")
     VERSION_CODE=$(echo "$APK_MANIFEST" | sed -n "s/.*versionCode='\([^']*\).*/\1/p")
-    echo "${VERSION_NAME}b${CI_BUILD_NUMBER}c${VERSION_CODE}"
+
+    CI_BUILD_SUFFIX=""
+    [[ -n "${CI_BUILD_NUMBER}" ]] && CI_BUILD_SUFFIX="b${CI_BUILD_NUMBER}"
+    VERSION_CODE_SUFFIX=""
+    [[ -n "${VERSION_CODE}" ]] && VERSION_CODE_SUFFIX="c${VERSION_CODE}"
+    echo "${VERSION_NAME}${CI_BUILD_SUFFIX}${VERSION_CODE_SUFFIX}"
 }
 
 function __generate_app_version_from_aab {
@@ -25,5 +30,10 @@ function __generate_app_version_from_aab {
     CI_BUILD_NUMBER=$2
     VERSION_CODE=$(echo "$APK_MANIFEST" | sed -n "s/.*versionCode=\"\([^\"]*\).*/\1/p")
     VERSION_NAME=$(echo "$APK_MANIFEST" | sed -n "s/.*versionName=\"\([^\"]*\).*/\1/p")
-    echo "${VERSION_NAME}b${CI_BUILD_NUMBER}c${VERSION_CODE}"
+
+    CI_BUILD_SUFFIX=""
+    [[ -n "${CI_BUILD_NUMBER}" ]] && CI_BUILD_SUFFIX="b${CI_BUILD_NUMBER}"
+    VERSION_CODE_SUFFIX=""
+    [[ -n "${VERSION_CODE}" ]] && VERSION_CODE_SUFFIX="c${VERSION_CODE}"
+    echo "${VERSION_NAME}${CI_BUILD_SUFFIX}${VERSION_CODE_SUFFIX}"
 }
