@@ -21,5 +21,7 @@ function __generate_app_version_from_ipa {
     # Remove tmp files
     rm -rf .tmp
 
-    echo "${APP_VERSION}-${APP_BUILD_NUMBER}b${CI_BUILD_NUMBER}"
+    CI_BUILD_SUFFIX=""
+    [[ -n "${CI_BUILD_NUMBER}" ]] && CI_BUILD_SUFFIX="b${CI_BUILD_NUMBER}"
+    echo "${APP_VERSION}-${APP_BUILD_NUMBER}${CI_BUILD_SUFFIX}"
 }
