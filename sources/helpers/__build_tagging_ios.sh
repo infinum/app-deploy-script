@@ -5,12 +5,11 @@
 function __generate_app_version_from_ipa {
     
     # Get file names
-    APP_PATH=$1
+    APP_PATH="$1"
     CI_BUILD_NUMBER=$2
-    FILE_NAME=$(basename $APP_PATH)
 
     # Unzip ipa file
-    unzip -q $APP_PATH -d .tmp
+    unzip -q "${APP_PATH}" -d .tmp
 
     # Read info .plist
     INFO_PLIST=.tmp/Payload/**/Info.plist
