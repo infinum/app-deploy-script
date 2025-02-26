@@ -71,8 +71,12 @@ function __validate_options {
         exit 1
     fi
 
-    # Check dependency between -p and -v
-    if [[ -z "$CUSTOM_APP_VERSION" && -z "$APP_PATH" ]]; then
+    # Ensure only one of -p or -v is set, and at least one is provided
+    if [[ -n "$APP_PATH" && -n "$CUSTOM_APP_VERSION" ]]; then
+        echo "Error: Options -p (path) and -v (version) are mutually exclusive. Provide only one."
+        echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
+        exit 1
+    elif [[ -z "$APP_PATH" && -z "$CUSTOM_APP_VERSION" ]]; then
         echo "Error: Either -p (path) or -v (version) must be provided."
         echo "Usage: app-deploy tagging -e \"environment_name\" [-p \"path/to/app.{ipa/apk}\" | -v \"version\"] -b \"{build count}\""
         exit 1
