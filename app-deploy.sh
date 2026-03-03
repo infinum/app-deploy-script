@@ -12,8 +12,28 @@ if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     [ "${args[0]}" == "trigger" ] && i=1 || i=0
     while [ $i -lt ${#args[@]} ]; do
         case "${args[$i]}" in
-            -m) i=$((i+1)); cli_changelog="${args[$i]}" ;;
-            -t) i=$((i+1)); cli_targets="${args[$i]}" ;;
+            -m)
+                next_index=$((i+1))
+                if [ $next_index -ge ${#args[@]} ] || [[ "${args[$next_index]}" == -* ]]; then
+                    echo
+                    echo "Missing value for -m flag. Please provide a changelog message after -m."
+                    echo
+                    exit 29
+                fi
+                i=$next_index
+                cli_changelog="${args[$i]}"
+                ;;
+            -t)
+                next_index=$((i+1))
+                if [ $next_index -ge ${#args[@]} ] || [[ "${args[$next_index]}" == -* ]]; then
+                    echo
+                    echo "Missing value for -t flag. Please provide target environments after -t."
+                    echo
+                    exit 29
+                fi
+                i=$next_index
+                cli_targets="${args[$i]}"
+                ;;
             *)
                 echo
                 echo "Unknown flag: ${args[$i]}"
