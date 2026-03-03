@@ -25,7 +25,11 @@ function __trigger_deploy {
 
     # CREATE TAG
 
-    deploy_options # Get from .deploy-options.sh, setup per project
+    if [ -n "$cli_targets" ]; then
+        deploy_options <<< "$cli_targets" # Get from .deploy-options.sh, setup per project
+    else
+        deploy_options # Get from .deploy-options.sh, setup per project
+    fi
     __input_to_tags
 
     if [ -z "$script_version" ] || [ "$script_version" == "v1" ]; then

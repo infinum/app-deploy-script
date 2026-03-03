@@ -2,7 +2,28 @@
 
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__help.sh
+
+cli_changelog=""
+cli_targets=""
+
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
+    # Parse optional CLI flags for the trigger command
+    args=("$@")
+    [ "${args[0]}" == "trigger" ] && i=1 || i=0
+    while [ $i -lt ${#args[@]} ]; do
+        case "${args[$i]}" in
+            -m) i=$((i+1)); cli_changelog="${args[$i]}" ;;
+            -t) i=$((i+1)); cli_targets="${args[$i]}" ;;
+            *)
+                echo
+                echo "Unknown flag: ${args[$i]}"
+                echo
+                exit 29
+                ;;
+        esac
+        i=$((i+1))
+    done
+
     source ./.deploy-options.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi

@@ -114,7 +114,11 @@ function __generate_tag_and_changelog {
             CHANGELOG=`git show -s --format=%N ${TAG} | tail -n +4`
             git tag -a "$tag" -m "${CHANGELOG}"
         else
-            git tag -a "$tag"
+            if [ -n "$cli_changelog" ]; then
+                git tag -a "$tag" -m "$cli_changelog"
+            else
+                git tag -a "$tag"
+            fi
             tag_message_added=1
         fi
     done

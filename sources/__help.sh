@@ -18,6 +18,9 @@ Parameters:
   --update                  Update the script to the latest version.
   init                      Initialize the deploy-options file for the project.
   trigger                   Generate a trigger tag for starting the CI/CD flow.
+                            Accepts the following options:
+    -t <targets>            Specify build targets non-interactively (e.g., "0 1").
+    -m <changelog>          Specify the changelog message non-interactively.
   environments <trigger-tag>
                             Extract environments from the specified trigger tag.
   tagging                   Generate a build tag after CI/CD uploads the build.
@@ -39,11 +42,15 @@ Examples:
       app-deploy or app-deploy trigger
       output: ci/internal-staging/2024-12-12T14-32
 
-  3. Extract environments from a trigger tag:
+  3. Generate a trigger tag (non-interactive):
+      app-deploy trigger -t "0 1" -m "Fixed login bug"
+      output: ci/internal-staging/internal-uat/2024-12-12T14-32
+
+  4. Extract environments from a trigger tag:
       app-deploy environments ci/internal-staging/2024-12-12T14-32
       output: internal-staging
 
-  4. Generate a final build tag:
+  5. Generate a final build tag:
       app-deploy tagging -e "internal-staging" -p "path/to/my-app.ipa" -b "123" -c "Added new features"
       output: internal-staging/v1.2.3-44b123
 
