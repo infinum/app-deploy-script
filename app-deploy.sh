@@ -3,47 +3,7 @@
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__help.sh
 
-cli_changelog=""
-cli_targets=""
-
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
-    # Parse optional CLI flags for the trigger command
-    args=("$@")
-    [ "${args[0]}" == "trigger" ] && i=1 || i=0
-    while [ $i -lt ${#args[@]} ]; do
-        case "${args[$i]}" in
-            -m)
-                next_index=$((i+1))
-                if [ $next_index -ge ${#args[@]} ] || [[ "${args[$next_index]}" == -* ]]; then
-                    echo
-                    echo "Missing value for -m flag. Please provide a changelog message after -m."
-                    echo
-                    exit 29
-                fi
-                i=$next_index
-                cli_changelog="${args[$i]}"
-                ;;
-            -t)
-                next_index=$((i+1))
-                if [ $next_index -ge ${#args[@]} ] || [[ "${args[$next_index]}" == -* ]]; then
-                    echo
-                    echo "Missing value for -t flag. Please provide target environments after -t."
-                    echo
-                    exit 29
-                fi
-                i=$next_index
-                cli_targets="${args[$i]}"
-                ;;
-            *)
-                echo
-                echo "Unknown flag: ${args[$i]}"
-                echo
-                exit 29
-                ;;
-        esac
-        i=$((i+1))
-    done
-
     source ./.deploy-options.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
 fi
@@ -66,7 +26,7 @@ source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
-VERSION="2.0.1"
+VERSION="2.1.0"
 
 #################################
 #       START EVERYTHING        #
@@ -84,7 +44,7 @@ elif [ "$1" == 'init' ] ; then
     __init
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __clear_console
-    __trigger_deploy
+    __trigger_deploy "$@"
 elif [ "$1" == 'environments' ] ; then
     __env_extractor "$2"
 elif [ "$1" == 'tagging' ]; then

@@ -19,8 +19,8 @@ Parameters:
   init                      Initialize the deploy-options file for the project.
   trigger                   Generate a trigger tag for starting the CI/CD flow.
                             Accepts the following options:
-    -t <targets>            Specify build targets non-interactively (e.g., "0 1").
-    -m <changelog>          Specify the changelog message non-interactively.
+    -t <targets>            Specify build targets non-interactively (e.g., "0 1"). Should match deploy-options values.
+    -m <changelog>          Specify the changelog message non-interactively. Does not accept empty string "".
   environments <trigger-tag>
                             Extract environments from the specified trigger tag.
   tagging                   Generate a build tag after CI/CD uploads the build.

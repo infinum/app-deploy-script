@@ -15,7 +15,24 @@ source /usr/local/bin/.app-deploy-sources/helpers/__initial_checkup.sh
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+function __parse_trigger_cli_flags {
+    cli_changelog=""
+    cli_targets=""
+
+    [ "${1}" == "trigger" ] && shift
+
+    while getopts "t:m:" opt; do
+        case "$opt" in
+            t) cli_targets="$OPTARG" ;;
+            m) cli_changelog="$OPTARG" ;;
+            *) echo "Error: Invalid option"; exit 29 ;;
+        esac
+    done
+}
+
 function __trigger_deploy {
+
+    __parse_trigger_cli_flags "$@"
 
     __header_print
 

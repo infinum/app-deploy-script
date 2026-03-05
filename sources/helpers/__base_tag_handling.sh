@@ -109,16 +109,14 @@ function __generate_tag_and_changelog {
     tag_message_added=0
     for tag in "${tags_to_deploy[@]}"; do
 
-        if [ ${tag_message_added} -eq 1 ]; then
+        if [ -n "$cli_changelog" ]; then
+            git tag -a "$tag" -m "$cli_changelog"
+        elif [ ${tag_message_added} -eq 1 ]; then
             TAG=`git describe --exact-match`
             CHANGELOG=`git show -s --format=%N ${TAG} | tail -n +4`
             git tag -a "$tag" -m "${CHANGELOG}"
         else
-            if [ -n "$cli_changelog" ]; then
-                git tag -a "$tag" -m "$cli_changelog"
-            else
-                git tag -a "$tag"
-            fi
+            git tag -a "$tag"
             tag_message_added=1
         fi
     done
