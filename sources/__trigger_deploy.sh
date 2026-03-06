@@ -16,16 +16,16 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 function __parse_trigger_cli_flags {
-    cli_changelog=""
-    cli_targets=""
+    CLI_CHANGELOG=""
+    CLI_TARGETS=""
 
     [ "${1}" == "trigger" ] && shift
 
     while getopts "t:m:" opt; do
         case "$opt" in
-            t) cli_targets="$OPTARG" ;;
-            m) cli_changelog="$OPTARG" ;;
-            *) echo "Error: Invalid option"; exit 29 ;;
+            t) CLI_TARGETS="$OPTARG" ;;
+            m) CLI_CHANGELOG="$OPTARG" ;;
+            *) echo "Error: Invalid option"; exit 1 ;;
         esac
     done
 }
@@ -42,8 +42,8 @@ function __trigger_deploy {
 
     # CREATE TAG
 
-    if [ -n "$cli_targets" ]; then
-        deploy_options <<< "$cli_targets" # Get from .deploy-options.sh, setup per project
+    if [ -n "$CLI_TARGETS" ]; then
+        deploy_options <<< "$CLI_TARGETS" # Get from .deploy-options.sh, setup per project
     else
         deploy_options # Get from .deploy-options.sh, setup per project
     fi

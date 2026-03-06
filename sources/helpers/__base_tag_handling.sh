@@ -96,21 +96,23 @@ function __create_trigger_ci_timestamp_tag {
 # Changelog
 function __generate_tag_and_changelog {
 
-    echo
-    echo "###############################################################"
-    echo "#                          CHANGELOG                          #"
-    echo "###############################################################"
-    echo
-    echo "------------------------------------------------------------"
-    echo "Enter changelog message..."
-    echo "------------------------------------------------------------"
-    sleep 1
+    if [ -z "$CLI_CHANGELOG" ]; then
+        echo
+        echo "###############################################################"
+        echo "#                          CHANGELOG                          #"
+        echo "###############################################################"
+        echo
+        echo "------------------------------------------------------------"
+        echo "Enter changelog message..."
+        echo "------------------------------------------------------------"
+        sleep 1
+    fi
 
     tag_message_added=0
     for tag in "${tags_to_deploy[@]}"; do
 
-        if [ -n "$cli_changelog" ]; then
-            git tag -a "$tag" -m "$cli_changelog"
+        if [ -n "$CLI_CHANGELOG" ]; then
+            git tag -a "$tag" -m "$CLI_CHANGELOG"
         elif [ ${tag_message_added} -eq 1 ]; then
             TAG=`git describe --exact-match`
             CHANGELOG=`git show -s --format=%N ${TAG} | tail -n +4`
