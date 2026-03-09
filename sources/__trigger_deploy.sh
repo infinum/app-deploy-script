@@ -15,7 +15,24 @@ source /usr/local/bin/.app-deploy-sources/helpers/__initial_checkup.sh
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+function __parse_trigger_cli_flags {
+    CLI_CHANGELOG=""
+    CLI_TARGETS=""
+
+    [ "${1}" == "trigger" ] && shift
+
+    while getopts "t:m:" opt; do
+        case "$opt" in
+            t) CLI_TARGETS="$OPTARG" ;;
+            m) CLI_CHANGELOG="$OPTARG" ;;
+            *) echo "Error: Invalid option"; exit 1 ;;
+        esac
+    done
+}
+
 function __trigger_deploy {
+
+    __parse_trigger_cli_flags "$@"
 
     __header_print
 
@@ -25,7 +42,11 @@ function __trigger_deploy {
 
     # CREATE TAG
 
-    deploy_options # Get from .deploy-options.sh, setup per project
+    if [ -n "$CLI_TARGETS" ]; then
+        deploy_options <<< "$CLI_TARGETS" # Get from .deploy-options.sh, setup per project
+    else
+        deploy_options # Get from .deploy-options.sh, setup per project
+    fi
     __input_to_tags
 
     if [ -z "$script_version" ] || [ "$script_version" == "v1" ]; then

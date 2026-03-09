@@ -2,6 +2,7 @@
 
 source /usr/local/bin/.app-deploy-sources/__constants.sh
 source /usr/local/bin/.app-deploy-sources/__help.sh
+
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
     source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
@@ -25,7 +26,7 @@ source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
-VERSION="2.0.1"
+VERSION="2.1.0"
 
 #################################
 #       START EVERYTHING        #
@@ -43,7 +44,7 @@ elif [ "$1" == 'init' ] ; then
     __init
 elif [ -z "$1" ] || [ "$1" == 'trigger' ] ; then # Empty input or "trigger"
     __clear_console
-    __trigger_deploy
+    __trigger_deploy "$@"
 elif [ "$1" == 'environments' ] ; then
     __env_extractor "$2"
 elif [ "$1" == 'tagging' ]; then
