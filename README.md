@@ -30,7 +30,7 @@ To successfully push tags to the repo, the local user and/or CI/CD project shoul
 To **install** this script, just run this command in Terminal from your <u>home directory</u>:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/infinum/app-deploy-script/master/install.sh)"
+sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/infinum/app-deploy-script/master/install.sh)"
 ```
 
 This script will install `app-deploy` and all the necessary components in `/usr/local/bin/`. 
