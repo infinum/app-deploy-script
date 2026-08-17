@@ -1,16 +1,30 @@
 #!/usr/bin/env bash
 
-source /usr/local/bin/.app-deploy-sources/__constants.sh
-source /usr/local/bin/.app-deploy-sources/__help.sh
+APP_DEPLOY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ -d "$APP_DEPLOY_ROOT/sources" ]; then
+    APP_DEPLOY_SOURCES="$APP_DEPLOY_ROOT/sources"
+    APP_DEPLOY_LEGACY_INSTALL="false"
+elif [ -d "$APP_DEPLOY_ROOT/.app-deploy-sources" ]; then
+    APP_DEPLOY_SOURCES="$APP_DEPLOY_ROOT/.app-deploy-sources"
+    APP_DEPLOY_LEGACY_INSTALL="true"
+else
+    echo "Unable to locate app-deploy source files."
+    echo "Please reinstall via 'brew install infinum/tap/app-deploy'."
+    exit 1
+fi
+
+source "$APP_DEPLOY_SOURCES/__constants.sh"
+source "$APP_DEPLOY_SOURCES/__help.sh"
 
 if [ -z "$1" ] || [ "$1" == 'trigger' ] ; then
     source ./.deploy-options.sh
-    source /usr/local/bin/.app-deploy-sources/__trigger_deploy.sh
+    source "$APP_DEPLOY_SOURCES/__trigger_deploy.sh"
 fi
-source /usr/local/bin/.app-deploy-sources/__auto_update.sh
-source /usr/local/bin/.app-deploy-sources/__init.sh
-source /usr/local/bin/.app-deploy-sources/__env_extractor.sh
-source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
+source "$APP_DEPLOY_SOURCES/__migrate.sh"
+source "$APP_DEPLOY_SOURCES/__init.sh"
+source "$APP_DEPLOY_SOURCES/__env_extractor.sh"
+source "$APP_DEPLOY_SOURCES/__build_tagging.sh"
 
 ###############################################################
 #                       DEPLOY SCRIPT                         #
@@ -26,19 +40,25 @@ source /usr/local/bin/.app-deploy-sources/__build_tagging.sh
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
-VERSION="2.1.0"
+VERSION="2.2.0"
 
 #################################
 #       START EVERYTHING        #
 #################################
+
+if [ "$1" != '-h' ] && [ "$1" != '--help' ] && [ "$1" != '-v' ] && [ "$1" != '--version' ] && [ "$1" != '--migrate' ] && [ "$APP_DEPLOY_LEGACY_INSTALL" == "true" ]; then
+    __legacy_install_warning
+fi
 
 if [ "$1" == '-h' ] || [ "$1" == '--help' ] ; then
     __help
 elif [ "$1" == '-v' ] || [ "$1" == '--version' ] ; then
     echo "app-deploy $VERSION"
 elif [ "$1" == '--update' ] ; then
+    __update_removed_notice
+elif [ "$1" == '--migrate' ] ; then
     __clear_console
-    __script_auto_update
+    __migrate_to_homebrew
 elif [ "$1" == 'init' ] ; then
     __clear_console
     __init

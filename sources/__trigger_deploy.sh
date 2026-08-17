@@ -1,6 +1,6 @@
-source /usr/local/bin/.app-deploy-sources/helpers/__base_tag_handling.sh
-source /usr/local/bin/.app-deploy-sources/helpers/__deploy_tags.sh
-source /usr/local/bin/.app-deploy-sources/helpers/__initial_checkup.sh
+source "$APP_DEPLOY_SOURCES/helpers/__base_tag_handling.sh"
+source "$APP_DEPLOY_SOURCES/helpers/__deploy_tags.sh"
+source "$APP_DEPLOY_SOURCES/helpers/__initial_checkup.sh"
 
 #################################
 #     DEPLOYMENT TRIGGER TAG    #

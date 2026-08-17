@@ -15,7 +15,8 @@ A group of scripts and tools designed to assist in the deployment process. This 
 Parameters:
   -v, --version             Check installed script version
   -h, --help                Show this help and exit
-  --update                  Update the script to the latest version.
+  --update                  Removed. Use 'brew upgrade app-deploy', or '--migrate' if not yet on Homebrew.
+  --migrate                 Migrate a manual installation to Homebrew.
   init                      Initialize the deploy-options file for the project.
   trigger                   Generate a trigger tag for starting the CI/CD flow.
                             Accepts the following options:
