@@ -27,27 +27,32 @@ To successfully push tags to the repo, the local user and/or CI/CD project shoul
 
 #### Installation
 
-To **install** this script, just run this command in Terminal from your <u>home directory</u>:
+This script is distributed via [Homebrew](https://brew.sh) through Infinum's private tap. Tapping requires GitHub access to `infinum/homebrew-tap`, so make sure your local git/GitHub credentials (SSH key or `gh auth login`) are set up first.
 
 ```bash
-sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/infinum/app-deploy-script/master/install.sh)"
+brew install infinum/tap/app-deploy
 ```
 
-This script will install `app-deploy` and all the necessary components in `/usr/local/bin/`. 
-
-Once script is installed, for local trigger tag creation, run `app-deploy init` inside the <u>project root folder</u>. That command will add `.deploy-options.sh` into the project's root folder. Once the file is added, update it according to your project needs.
+Once installed, for local trigger tag creation, run `app-deploy init` inside the <u>project root folder</u>. That command will add `.deploy-options.sh` into the project's root folder. Once the file is added, update it according to your project needs.
 
 > Note: Do not change the name or location of the `.deploy-options.sh` file!
 
 #### Update
 
-Script can be updated by running the `--update` command.
+Script can be updated by running:
 ```bash
-app-deploy --update
+brew upgrade app-deploy
 ```
 ***This update will not effect `.deploy-options.sh` file.***
 
-> Script commands such as `install`, and `--update` will need `sudo` to execute successfully. Use it when requested.
+#### Migrating from a manual installation
+
+If you installed `app-deploy` before v2.2.0 via the old `install.sh` script, migrate it to Homebrew:
+
+1. Run `app-deploy --update` if you're still on a pre-2.2.0 version, to pull in the last version that supports the migration.
+2. Run `app-deploy --migrate`. This removes the manual installation from `/usr/local/bin` (`sudo` will be requested) and installs `app-deploy` via Homebrew.
+
+`--update` no longer updates the script directly - once migrated, use `brew upgrade app-deploy` going forward.
 
 For more details on migrating from v1 to v2, please check the [Migration from v1 to v2](https://github.com/infinum/app-deploy-script/wiki/Migration-from-v1-to-v2) guidelines.
 

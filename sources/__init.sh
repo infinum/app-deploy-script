@@ -1,4 +1,4 @@
-source /usr/local/bin/.app-deploy-sources/__constants.sh
+source "$APP_DEPLOY_SOURCES/__constants.sh"
 
 #################################
 #       INIT NEW PROJECT        #
@@ -18,7 +18,7 @@ function __init {
         fi
     fi
 
-    cat /usr/local/bin/.app-deploy-sources/deploy-options.sh > ./.deploy-options.sh
+    cat "$APP_DEPLOY_SOURCES/deploy-options.sh" > ./.deploy-options.sh
     echo "The options file was generated successfully!"
     echo "NOTE: Change default values to the project specific."
     echo

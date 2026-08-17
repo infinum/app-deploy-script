@@ -1,4 +1,4 @@
-source /usr/local/bin/.app-deploy-sources/__constants.sh
+source "$APP_DEPLOY_SOURCES/__constants.sh"
 
 #################################
 #          CREATE TAG           #
