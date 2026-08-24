@@ -27,10 +27,23 @@ To successfully push tags to the repo, the local user and/or CI/CD project shoul
 
 #### Installation
 
-This script is distributed via [Homebrew](https://brew.sh) through Infinum's private tap. Tapping requires GitHub access to `infinum/homebrew-tap`, so make sure your local git/GitHub credentials (SSH key or `gh auth login`) are set up first.
+This script is distributed via [Homebrew](https://brew.sh) through Infinum's private tap.
 
 ```bash
 brew install infinum/tap/app-deploy
+```
+
+That single command taps the repository if needed and records trust for the
+formula, so no separate `brew tap` or `brew trust` step is required.
+
+Homebrew 6.0 refuses to load formulae from non-official taps until they are
+trusted, so installing by the short name needs a one-time `brew trust` per
+machine:
+
+```sh
+brew tap infinum/tap
+brew trust infinum/tap
+brew install app-deploy
 ```
 
 Once installed, for local trigger tag creation, run `app-deploy init` inside the <u>project root folder</u>. That command will add `.deploy-options.sh` into the project's root folder. Once the file is added, update it according to your project needs.
