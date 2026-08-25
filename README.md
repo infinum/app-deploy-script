@@ -15,6 +15,7 @@ Once the build process is finished on CI/CD and the installation file is uploade
 * [Requirements](#requirements)
 * [Getting started](#getting-started)
 * [Usage](#usage)
+* [Releasing](#releasing)
 * [Contributing](#contributing)
 * [License](#license)
 * [Credits](#credits)
@@ -25,25 +26,29 @@ To successfully push tags to the repo, the local user and/or CI/CD project shoul
 
 ## Getting started
 
-#### Installation
+### Installation
+#### Homebrew
 
-This script is distributed via [Homebrew](https://brew.sh) through Infinum's private tap.
+This script is distributed via [Homebrew](https://brew.sh) through Infinum's tap:
 
 ```bash
 brew install infinum/tap/app-deploy
 ```
 
-That single command taps the repository if needed and records trust for the
-formula, so no separate `brew tap` or `brew trust` step is required.
+Homebrew 6.0+ requires trusting non-official taps before installing from them, so if that command fails or prompts you to trust the tap, tap and trust it explicitly first, then install:
 
-Homebrew 6.0 refuses to load formulae from non-official taps until they are
-trusted, so installing by the short name needs a one-time `brew trust` per
-machine:
-
-```sh
+```bash
 brew tap infinum/tap
 brew trust infinum/tap
 brew install app-deploy
+```
+
+#### npm
+
+The same script is also published to npm as [`@infinum/app-deploy`](https://www.npmjs.com/package/@infinum/app-deploy):
+
+```bash
+npm install -g @infinum/app-deploy
 ```
 
 Once installed, for local trigger tag creation, run `app-deploy init` inside the <u>project root folder</u>. That command will add `.deploy-options.sh` into the project's root folder. Once the file is added, update it according to your project needs.
@@ -55,6 +60,8 @@ Once installed, for local trigger tag creation, run `app-deploy init` inside the
 Script can be updated by running:
 ```bash
 brew upgrade app-deploy
+# or, for npm installations
+npm update -g @infinum/app-deploy
 ```
 ***This update will not effect `.deploy-options.sh` file.***
 
@@ -72,6 +79,19 @@ For more details on migrating from v1 to v2, please check the [Migration from v1
 ## Usage
 
 For detailed usage documentation, please check the [wiki pages](https://github.com/infinum/app-deploy-script/wiki).
+
+## Releasing
+
+Releases are cut with `scripts/release.sh`, which keeps the version in `app-deploy.sh` and `package.json` in sync and publishes to both Homebrew and npm. The version is typed exactly once:
+
+```bash
+scripts/release.sh prepare 2.3.0   # bumps the version, pushes a release branch and opens a PR
+# ... merge the PR ...
+git checkout master && git pull
+scripts/release.sh publish         # tags, creates the GitHub release, publishes to npm, opens the tap PR
+```
+
+Both commands accept `--dry-run` (print what would happen) and `--direct` (push to the protected branch instead of opening a PR, for maintainers with bypass rights). `publish` skips any step that has already been done, so it can be re-run safely after a failure. Requirements: `gh` and `npm` authenticated, and the `infinum/tap` tap installed locally.
 
 ## Contributing
 

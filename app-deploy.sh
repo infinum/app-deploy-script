@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
-APP_DEPLOY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve the real location of this script, following symlinks. Homebrew invokes
+# the script through an exec wrapper with an absolute path, but npm installs a
+# plain symlink (e.g. /usr/local/bin/app-deploy -> ../lib/node_modules/...),
+# so BASH_SOURCE alone would point at the wrong directory.
+APP_DEPLOY_SELF="${BASH_SOURCE[0]}"
+while [ -L "$APP_DEPLOY_SELF" ]; do
+    APP_DEPLOY_SELF_DIR="$(cd "$(dirname "$APP_DEPLOY_SELF")" && pwd)"
+    APP_DEPLOY_SELF="$(readlink "$APP_DEPLOY_SELF")"
+    [[ "$APP_DEPLOY_SELF" != /* ]] && APP_DEPLOY_SELF="$APP_DEPLOY_SELF_DIR/$APP_DEPLOY_SELF"
+done
+APP_DEPLOY_ROOT="$(cd "$(dirname "$APP_DEPLOY_SELF")" && pwd)"
 
 if [ -d "$APP_DEPLOY_ROOT/sources" ]; then
     APP_DEPLOY_SOURCES="$APP_DEPLOY_ROOT/sources"
@@ -10,8 +20,16 @@ elif [ -d "$APP_DEPLOY_ROOT/.app-deploy-sources" ]; then
     APP_DEPLOY_LEGACY_INSTALL="true"
 else
     echo "Unable to locate app-deploy source files."
-    echo "Please reinstall via 'brew install infinum/tap/app-deploy'."
+    echo "Please reinstall via 'brew install infinum/tap/app-deploy' or 'npm install -g @infinum/app-deploy'."
     exit 1
+fi
+
+# Which package manager owns this installation. Only affects user-facing hints
+# (update instructions etc.) - the script itself never depends on either.
+if [[ "$APP_DEPLOY_ROOT" == */node_modules/* ]]; then
+    APP_DEPLOY_PACKAGE_MANAGER="npm"
+else
+    APP_DEPLOY_PACKAGE_MANAGER="brew"
 fi
 
 source "$APP_DEPLOY_SOURCES/__constants.sh"

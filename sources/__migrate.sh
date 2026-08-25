@@ -6,6 +6,12 @@ function __migrate_to_homebrew {
 
     __header_print
 
+    if [ "$APP_DEPLOY_PACKAGE_MANAGER" == "npm" ]; then
+        echo "Installed via npm - nothing to migrate."
+        echo "Use 'npm update -g @infinum/app-deploy' to update."
+        exit 0
+    fi
+
     if [ "$APP_DEPLOY_LEGACY_INSTALL" != "true" ]; then
         echo "Already installed via Homebrew - nothing to migrate."
         echo "Use 'brew upgrade app-deploy' to update."
