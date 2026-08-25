@@ -30,6 +30,8 @@ function __update_removed_notice {
     if [ "$APP_DEPLOY_LEGACY_INSTALL" == "true" ]; then
         echo "'--update' is no longer supported."
         echo "Run 'app-deploy --migrate' to move to Homebrew - updates are then handled via 'brew upgrade app-deploy'."
+    elif [ "$APP_DEPLOY_PACKAGE_MANAGER" == "npm" ]; then
+        echo "'--update' is no longer supported. Use 'npm update -g @infinum/app-deploy' instead."
     else
         echo "'--update' is no longer supported. Use 'brew upgrade app-deploy' instead."
     fi
