@@ -35,16 +35,11 @@ This script is distributed via [Homebrew](https://brew.sh) through Infinum's tap
 brew install infinum/tap/app-deploy
 ```
 
-or after adding and trusting Infinum tap,
+Homebrew 6.0+ requires trusting non-official taps before installing from them, so if that command fails or prompts you to trust the tap, tap and trust it explicitly first, then install:
 
 ```bash
 brew tap infinum/tap
 brew trust infinum/tap
-```
-
-simply run installation command:
-
-```bash
 brew install app-deploy
 ```
 
