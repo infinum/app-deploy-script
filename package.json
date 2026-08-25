@@ -1,8 +1,16 @@
 {
   "name": "@infinum/app-deploy",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "CLI for creating CI deployment trigger and build tags for mobile apps",
-  "keywords": ["ci", "deploy", "mobile", "android", "ios", "git", "tags"],
+  "keywords": [
+    "ci",
+    "deploy",
+    "mobile",
+    "android",
+    "ios",
+    "git",
+    "tags"
+  ],
   "homepage": "https://github.com/infinum/app-deploy-script",
   "bugs": "https://github.com/infinum/app-deploy-script/issues",
   "repository": {
@@ -18,7 +26,10 @@
     "app-deploy.sh",
     "sources/"
   ],
-  "os": ["darwin", "linux"],
+  "os": [
+    "darwin",
+    "linux"
+  ],
   "publishConfig": {
     "access": "public"
   }
