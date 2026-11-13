@@ -1,6 +1,6 @@
 {
   "name": "@infinum/app-deploy",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "CLI for creating CI deployment trigger and build tags for mobile apps",
   "keywords": [
     "ci",

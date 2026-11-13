@@ -58,7 +58,7 @@ source "$APP_DEPLOY_SOURCES/__build_tagging.sh"
 # Use global variables at your own risk as this can be overridden in the future.
 set -e
 
-VERSION="2.2.1"
+VERSION="2.2.2"
 
 #################################
 #       START EVERYTHING        #
