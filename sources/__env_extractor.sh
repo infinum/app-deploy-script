@@ -22,15 +22,18 @@ function __env_extractor {
         IFS='/' read -ra words <<< "$paths"
         echo "$(IFS=$'\n'; echo "${words[*]}")"
     else
-        echo
-        echo "Incorrect input value."
-        echo
-        echo "The environment can only be extracted from the official trigger tag."
-        echo
-        echo "Please use this script for generating the trigger tag, or use the tag in the format:"
-        echo "prefix: ci/"
-        echo "environments: env1/env2/..."
-        echo "sufix: /timestamp where timestamp should be in the format of +%Y-%m-%dT%H-%M-%S (2024-12-06T11-24-53)"
-        echo "EXAMPLE: ci/env1/env2/2024-12-06T11-24-53"
+        {
+            echo
+            echo "Incorrect input value."
+            echo
+            echo "The environment can only be extracted from the official trigger tag."
+            echo
+            echo "Please use this script for generating the trigger tag, or use the tag in the format:"
+            echo "prefix: ci/"
+            echo "environments: env1/env2/..."
+            echo "sufix: /timestamp where timestamp should be in the format of +%Y-%m-%dT%H-%M-%S (2024-12-06T11-24-53)"
+            echo "EXAMPLE: ci/env1/env2/2024-12-06T11-24-53"
+        } >&2
+        exit 1
     fi
 }
