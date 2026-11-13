@@ -12,12 +12,15 @@ function __generate_app_version_from_apk {
     CI_BUILD_NUMBER=$2
 
     __require_tools aapt || return 1
-    APK_MANIFEST=$(aapt dump badging "${APP_PATH}") || {
-        echo "Error: aapt couldn't read ${APP_PATH}." >&2
-        return 1
-    }
+    # aapt can exit with an error after printing the version, e.g. on an android:label that isn't a plain string,
+    # so whether the version was found decides, not the exit code
+    APK_MANIFEST=$(aapt dump badging "${APP_PATH}" 2>&1)
     VERSION_NAME=$(echo "$APK_MANIFEST" | sed -n "s/.*versionName='\([^']*\).*/\1/p")
     VERSION_CODE=$(echo "$APK_MANIFEST" | sed -n "s/.*versionCode='\([^']*\).*/\1/p")
+    if [[ -z "${VERSION_NAME}" ]]; then
+        echo "Error: aapt couldn't read ${APP_PATH}:" >&2
+        echo "$APK_MANIFEST" >&2
+    fi
 
     __android_app_version
 }
